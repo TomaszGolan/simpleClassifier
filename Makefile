@@ -27,3 +27,6 @@ $(BIN):
 clean:
 	@echo "\n##### Removing $(OBJ) $(addprefix $(BIN_DIR)/, $(BIN)) #####\n"
 	@rm -f $(OBJ) $(addprefix $(BIN_DIR)/, $(BIN))
+
+doxygen:
+	doxygen docs/Doxyfile
