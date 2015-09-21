@@ -6,74 +6,57 @@
 
 using namespace std;
 
-// run kNN algorithm for given sample size, number of nearest neighbors for separable case or not
-double runKNN (const unsigned int &N, const unsigned int &k, const bool &sep);
+const unsigned int N_MIN  = 100; // minimum sample size
+const unsigned int N_MAX  = 500; // maximum sample size
+const unsigned int N_STEP =  50; // step for sample size
+const unsigned int K_MIN  =  10; // minimum no. of nearest neighbors
+const unsigned int K_STEP =  10; // step for no. of nearest neighbors
+
+const string DIR = "knnResults/"; // output folder
+
+// run kNN loop for separable or inseparable points
+void runKNN (const bool &sep);
 
 int main ()
 { 
-  ofstream fileSep   ("knnResults/knn.separable");   // results for separable case
-  ofstream fileInSep ("knnResults/knn.inseparable"); // results for inseparable case
-  
-  for (unsigned int n = 100; n <= 500; n += 50) // sample size loop
-  {
-    for (unsigned int k = 10; k <= n; k += 10) // no. of nearest neighbors loop
-    {
-      cout << "Running kNN for N = " << n << ", k = " << k << "...\n";
-      
-      fileSep   << n << " " << k << " " << runKNN (n, k, true) << "\n";
-      fileInSep << n << " " << k << " " << runKNN (n, k, false) << "\n";      
-    } // sample size loop end
-    
-    fileSep << "\n";   // for gnuplot's splot
-    fileInSep << "\n"; // for gnuplot's splot
-  } // no. of nearest neighbors loop end
-  
-  // close files
-  fileSep.close();
-  fileInSep.close();
+  runKNN (true);
+  runKNN (false);
        
   return 0;
 }
 
-// run kNN algorithm for given sample size, number of nearest neighbors for separable case or not
-double runKNN (const unsigned int &N, const unsigned int &k, const bool &sep)
-{  
-  KNN knn (N, k, sep); // initialize classifier
+// run kNN loop for separable or inseparable points
+void runKNN (const bool &sep)
+{ 
+  string flag;
   
-  string base = "knnResults/knn_" + to_string (N) + "_" + to_string (k); // common string for files name
+  if (sep) flag = "separable";
+  else flag = "inseparable";
+    
+  ofstream resultsFile ((DIR + "knn_" + flag + ".dat").c_str()); // files to save score for given configuration
   
-  // add proper tag
-  if (sep) base += "_separable";
-  else base += "_inseparable";
-  
-  // open files
-  ofstream fileSetA ((base + ".A").c_str());
-  ofstream fileSetB ((base + ".B").c_str());
-  ofstream fileGood ((base + ".good").c_str());
-  ofstream fileBad ((base + ".bad").c_str());
-  
-  // save learning samples
-  knn.save (fileSetA, fileSetB);
-  
-  unsigned int score = 0;
-  
-  for (unsigned int i = 0; i < N; i++) // points loop
+  for (unsigned int n = N_MIN; n < N_MAX; n += N_STEP) // sample size loop
   {
-    Point p; // create random point
-        
-    if (knn.isReconstructed (p)) // if guessed correctly
+    for (unsigned int k = K_MIN; k < n; k += K_STEP) // no. of nearest neighbors loop
     {
-      p.print (fileGood); // save as guessed point
-      score++;
-    }
-    else p.print (fileBad); // save as not guessed point
-  }
+      cout << "Running kNN (" << flag << ") for N = " << n << ", k = " << k << " -> score = ";
+      
+      KNN knn (n, k, sep); // create kNN for given configuration
+      
+      const double score = knn.run(); // get score
+      
+      cout << score << "\n";
+      
+      resultsFile << n << " " << k << " " << score << "\n";
+      
+      // save learning samples, guessed points and not guessed points
+      knn.save ((DIR + flag + "/knn_" + to_string (n) + "_" + to_string (k) + "_" + flag + ".dat").c_str());      
+      
+    } // sample size loop end
+    
+    resultsFile << "\n"; // for gnuplot's splot
+    
+  } // no. of nearest neighbors loop end
   
-  // close files
-  fileSetA.close();
-  fileSetB.close();
-  fileGood.close();
-  fileBad.close();
-  
-  return (double) score / (double) N; // return score
+  resultsFile.close(); // close score file
 }

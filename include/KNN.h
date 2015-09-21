@@ -27,7 +27,7 @@ class KNN : public Classifier
   
     //! constructor calls Classifier constructor and sets up number of nearest neighbors
     KNN (const unsigned int &N, const unsigned int &k, const bool separable = true) : Classifier (N, separable),
-                                                                                      nNeighbors (k) {}     
+                                                                                      nNeighbors (k) {}
 };
 
 #endif

@@ -37,7 +37,7 @@ class Point
         
     static Position position; //!< defines the circle point should be randommized from
     
-    Point (const double &x, const double &y) : x(x), y(y) {} //!< constructor of point with define coordinates
+    Point (const double &x, const double &y) : x (x), y (y) {} //!< constructor of point with define coordinates
     
   protected:
         
