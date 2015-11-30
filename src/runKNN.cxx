@@ -38,12 +38,13 @@ void createDirs ()
   vector <boost::filesystem::path> dirs = {DIR, DIR + "/separable", DIR + "/inseparable"};
 
   for (auto &d : dirs) // loop over folders
-    if (not boost::filesystem::create_directory (d)) // try to create folder
-    {
-      // stop program if folder could not be created
-      cout << "\n\nERROR: could not create " << d << "\n\n";
-      exit (1); 
-    }
+    if (not boost::filesystem::exists (d))
+      if (not boost::filesystem::create_directory (d)) // try to create folder
+      {
+        // stop program if folder could not be created
+        cout << "\n\nERROR: could not create " << d << "\n\n";
+        exit (1); 
+      }
 }
 
 // run kNN loop for separable or inseparable points

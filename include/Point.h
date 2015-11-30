@@ -20,22 +20,17 @@ class Point
   
   public:
 
-    //! possible positions: left circle, inner circle, any circle, outer circle, right circle
-    enum Position {DOWN = -3, LEFT, IN, ANY, OUT, RIGHT, TOP};
+    //! possible positions: left side, inner circle, any, outer circle, right side
+    enum Position {LEFT = -2, IN, ANY, OUT, RIGHT};
    
   private:
     
-    double x; //!< x coordinate
-    double y; //!< y coordinate
-        
-    //! use to variate radius a little (do not want to have perfect circles)
-    inline double variate (const double &x) const { return x * random.generate11() * exp ((x-radius) * (x-radius)); }
-    
+    double x; //!< x coordinate [-1, 1]
+    double y; //!< y coordinate [-1, 1]
+            
     static const PRNG random; //!< random number generator shared by all points
-    
-    static const double radius; //!< base circle radius
-        
-    static Position position; //!< defines the circle point should be randommized from
+            
+    static Position position; //!< defines the default position of new point
     
     Point (const double &x, const double &y) : x (x), y (y) {} //!< constructor of point with define coordinates
     
@@ -45,7 +40,7 @@ class Point
     inline static void resetPosition () { position = ANY; }                       //!< set position to ANY
     inline static void switchPosition () { position = Position (-(int)position);} //!< reverse position, e.g. L->R
     
-    Position getPosition (const bool &separable = true) const; //!< get the closest circle
+    Position getPosition (const bool &separable = true) const; //!< get true position
 
   public:
     

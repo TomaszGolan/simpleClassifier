@@ -14,7 +14,7 @@ BIN = runKNN
 
 runKNN.dep = runKNN.o Point.o Classifier.o KNN.o
 
-all: $(OBJ) $(BIN)
+all: createFolders $(OBJ) $(BIN)
 
 $(OBJ): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.cxx
 	@echo "\n##### Compiling $@ #####\n"
@@ -23,6 +23,10 @@ $(OBJ): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.cxx
 $(BIN):
 	@echo "\n##### Linking $@ #####\n"
 	$(CXX) $(addprefix $(OBJ_DIR)/, $($@.dep)) -o $(BIN_DIR)/$@ $(CXXFLAGS) 
+	
+createFolders:
+		mkdir -p $(OBJ_DIR)
+		mkdir -p $(BIN_DIR)
 	
 clean:
 	@echo "\n##### Removing $(OBJ) $(addprefix $(BIN_DIR)/, $(BIN)) #####\n"
