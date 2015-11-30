@@ -2,8 +2,11 @@
 #include <fstream>
 
 //! fill samples A/B by LEFT/RIGHT points or IN/OUT (circle), depends if user wants separable points or not
-Classifier :: Classifier (const unsigned int &N, const bool separable) : separable (separable), N (N)
+Classifier :: Classifier (const unsigned int &N, const bool separable, const double shift)
+              : separable (separable), N (N)
 {
+  Point::setShift (shift);
+  
   // set Point::position for first set
   if (separable) Point::setPosition (Point::LEFT);
   else Point::setPosition (Point::IN);

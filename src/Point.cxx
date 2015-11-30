@@ -3,6 +3,7 @@
 const PRNG Point::random = PRNG (0.0, 1.0); //!< initialize random number generator
 
 Point::Position Point::position = ANY; //!< initialize position as any
+double Point::shift = 0.0; //!< initialize shift as 0
 
 //! generate random (x,y) pair matches given conditions
 Point :: Point ()
@@ -11,7 +12,8 @@ Point :: Point ()
   {
     const double alpha = 2.0 * M_PI * random.generate10(); // random angle
     // R in [0, 0.5] for inner circle and [0.5, 1.0] for outer one
-    const double radius = position == IN ? sqrt (0.5 * random.generate11()) : sqrt (0.5 * random.generate11() + 0.5);
+    const double radius = position == IN ? sqrt (0.5 * random.generate11() - shift) :
+                                           sqrt (0.5 * random.generate11() + 0.5 + shift);
     x = radius * cos (alpha);
     y = radius * sin (alpha);
     return;
@@ -21,9 +23,9 @@ Point :: Point ()
   
   switch (position)
   {
-    case ANY:   y = 2.0 * (random.generate11() - 0.5); break;      // random y from the whole range
-    case LEFT:  y = x + (1.0 - x) * random.generate11(); break;    // random y > x
-    case RIGHT: y = -1.0 + (x + 1.0) * random.generate11(); break; // random y < x
+    case ANY:   y = 2.0 * (random.generate11() - 0.5); break;                   // random y from the whole range
+    case LEFT:  y = x + shift + (1.0 - x - shift) * random.generate11(); break; // random y > x
+    case RIGHT: y = -1.0 + (x - shift + 1.0) * random.generate11(); break;      // random y < x
     default: std::cerr << "\nERROR: Point() - unknown position\n\n;";
   }
 }

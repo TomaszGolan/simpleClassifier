@@ -32,6 +32,8 @@ class Point
             
     static Position position; //!< defines the default position of new point
     
+    static double shift; //!< positive shift makes space between two sets, negative makes them overlap
+    
     Point (const double &x, const double &y) : x (x), y (y) {} //!< constructor of point with define coordinates
     
   protected:
@@ -41,10 +43,12 @@ class Point
     inline static void switchPosition () { position = Position (-(int)position);} //!< reverse position, e.g. L->R
     
     Position getPosition (const bool &separable = true) const; //!< get true position
+    
+    inline static void setShift (const double x) { shift = x; } //!< set shift
 
   public:
     
-    Point (); //!< constructor sets up radnom coordinates respect to position
+    Point (); //!< constructor sets up random coordinates respect to position
         
     inline void print (std::ostream &os = std::cout) const { os << x << " " << y << "\n"; } //!< print point to ostream
             

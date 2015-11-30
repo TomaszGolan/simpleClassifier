@@ -46,8 +46,9 @@ class Classifier
     
   public:
   
-    Classifier (const unsigned int &N, const bool separable = true); //!< constructor fills learning samples
-        
+    //! constructor fills learning samples
+    Classifier (const unsigned int &N, const bool separable = true, const double shift = 0); 
+
     double run (); //!< run classifier and return score
 
     void print (std::ostream &osA = std::cout, std::ostream &osB = std::cout,
