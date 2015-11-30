@@ -7,8 +7,8 @@ INC = $(wildcard $(INC_DIR)/*.h)
 SRC = $(wildcard $(SRC_DIR)/*.cxx)
 OBJ = $(SRC:$(SRC_DIR)/%.cxx=$(OBJ_DIR)/%.o)
 
-CXX = g++
-CXXFLAGS = -std=c++11 -Wall -I $(INC_DIR)
+CXX = g++ -std=c++11 -Wall
+CXXFLAGS = -I $(INC_DIR) -lboost_system -lboost_filesystem
 
 BIN = runKNN
 
@@ -18,11 +18,11 @@ all: $(OBJ) $(BIN)
 
 $(OBJ): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.cxx
 	@echo "\n##### Compiling $@ #####\n"
-	$(CXX) $(CXXFLAGS) -c $< -o $@  #compiling
+	$(CXX) -c $< -o $@  $(CXXFLAGS) #compiling
 
 $(BIN):
 	@echo "\n##### Linking $@ #####\n"
-	$(CXX) $(CXXFLAGS) $(addprefix $(OBJ_DIR)/, $($@.dep)) -o $(BIN_DIR)/$@ 
+	$(CXX) $(addprefix $(OBJ_DIR)/, $($@.dep)) -o $(BIN_DIR)/$@ $(CXXFLAGS) 
 	
 clean:
 	@echo "\n##### Removing $(OBJ) $(addprefix $(BIN_DIR)/, $(BIN)) #####\n"

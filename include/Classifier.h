@@ -33,7 +33,7 @@ class Classifier
     
     //! print chosen vector of points to given ostream
     inline void print (const std::vector <Point> &points, std::ostream &os) const
-      { for (std::vector<Point>::const_iterator it = points.begin(); it != points.end(); ++it) (*it).print (os); }
+      { for (auto &p : points) p.print (os); }
 
     virtual bool process (const Point &p) const = 0; //!< returns true/false if points is found to be in A/B set
     

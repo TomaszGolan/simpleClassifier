@@ -21,7 +21,7 @@ class Point
   public:
 
     //! possible positions: left circle, inner circle, any circle, outer circle, right circle
-    enum Position {LEFT = -2, IN, ANY, OUT, RIGHT};
+    enum Position {DOWN = -3, LEFT, IN, ANY, OUT, RIGHT, TOP};
    
   private:
     
