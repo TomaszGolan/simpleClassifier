@@ -34,3 +34,8 @@ clean:
 
 doxygen:
 	doxygen docs/Doxyfile
+	
+make run:
+	make
+	./bin/runKNN
+	./gnuplot/plotKNN.sh

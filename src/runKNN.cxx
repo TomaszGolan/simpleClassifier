@@ -7,9 +7,9 @@
 
 using namespace std;
 
-const unsigned int N_MIN  = 100; // minimum sample size
-const unsigned int N_MAX  = 500; // maximum sample size
-const unsigned int N_STEP =  50; // step for sample size
+const unsigned int N_MIN  = 50; // minimum sample size
+const unsigned int N_MAX  = 100; // maximum sample size
+const unsigned int N_STEP =  10; // step for sample size
 const unsigned int K_MIN  =  10; // minimum no. of nearest neighbors
 const unsigned int K_STEP =  10; // step for no. of nearest neighbors
 
@@ -50,7 +50,6 @@ void createDir (boost::filesystem::path dir)
     }  
 }
 
-
 // create folder structure for the results
 void createDirs ()
 {
@@ -68,23 +67,17 @@ void createDirs ()
 // run kNN loop for separable or inseparable points for given shift
 void runKNN (const bool separable, const double shift)
 { 
-  string flag, flag2;
-  
-  if (separable) flag = "separable";
-  else flag = "inseparable";
-  
-  if (shift == 0.0) flag2 = "default";
-  else if (shift > 0.0) flag2 = "distant";
-  else flag2 = "overlapped";
-  
+  const string flagSep = separable ? "separable" : "inseparable";
+  const string flagShf = shift == 0 ? "default" : (shift > 0 ? "distant" : "overlapped");
+    
   // files to save score for given configuration
-  ofstream resultsFile ((DIR + "knn_" + flag + "_" + flag2 + ".dat").c_str());
+  ofstream resultsFile ((DIR + "knn_" + flagSep + "_" + flagShf + ".dat").c_str());
   
-  for (unsigned int n = N_MIN; n < N_MAX; n += N_STEP) // sample size loop
+  for (unsigned int n = N_MIN; n <= N_MAX; n += N_STEP) // sample size loop
   {
-    for (unsigned int k = K_MIN; k < n; k += K_STEP) // no. of nearest neighbors loop
+    for (unsigned int k = K_MIN; k <= n; k += K_STEP) // no. of nearest neighbours loop
     {
-      cout << "Running kNN (" << flag << ", " << flag2 << ") for N = " << n << ", k = " << k << " -> score = ";
+      cout << "Running kNN (" << flagSep << ", " << flagShf << ") for N = " << n << ", k = " << k << " -> score = ";
       
       KNN knn (n, k, separable, shift); // create kNN for given configuration
       
@@ -95,7 +88,8 @@ void runKNN (const bool separable, const double shift)
       resultsFile << n << " " << k << " " << score << "\n";
       
       // save learning samples, guessed points and not guessed points
-      knn.save ((DIR + flag + "/" + flag2 + "/knn_" + to_string (n) + "_" + to_string (k) + "_" + flag + ".dat").c_str());      
+      knn.save ((DIR + flagSep + "/" + flagShf + "/" 
+                 + "knn_" + to_string (n) + "_" + to_string (k) + "_" + flagSep + "_" + flagShf).c_str());      
       
     } // sample size loop end
     
