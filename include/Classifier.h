@@ -37,7 +37,7 @@ class Classifier
 
     virtual bool process (const Point &p) const = 0; //!< returns true/false if points is found to be in A/B set
     
-    virtual void learn (const char *book = NULL) {}; //!< learn classifier, pass filename if already learned
+    virtual void learn (const char *book = NULL) {}; //!< learn classifier, pass file name if already learned
 
   protected:
     
@@ -47,7 +47,7 @@ class Classifier
   public:
   
     //! constructor fills learning samples
-    Classifier (const unsigned int &N, const bool separable = true, const double shift = 0); 
+    Classifier (const unsigned int &N, const bool separable = true, const double shift = 0);
 
     double run (); //!< run classifier and return score
 

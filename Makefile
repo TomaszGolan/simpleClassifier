@@ -10,9 +10,11 @@ OBJ = $(SRC:$(SRC_DIR)/%.cxx=$(OBJ_DIR)/%.o)
 CXX = g++ -std=c++11 -Wall
 CXXFLAGS = -I $(INC_DIR) -lboost_system -lboost_filesystem
 
-BIN = runKNN
+BIN = runKNN runSVM
 
-runKNN.dep = runKNN.o Point.o Classifier.o KNN.o
+runKNN.dep = runKNN.o Point.o Classifier.o KNN.o utils.o
+
+runSVM.dep = runSVM.o Point.o Classifier.o SVM.o utils.o
 
 all: createFolders $(OBJ) $(BIN)
 
@@ -35,7 +37,10 @@ clean:
 doxygen:
 	doxygen docs/Doxyfile
 	
-make run:
+run:
 	make
 	./bin/runKNN
 	./gnuplot/plotKNN.sh
+
+clear:
+	rm -r knnResults/

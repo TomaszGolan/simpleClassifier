@@ -25,15 +25,16 @@ Point :: Point ()
   }
   else
   {
+    // use CDF to get x according to f(x) = x
     const double u = random.generate11();
     x = 2.0 * sqrt(u) - 1.0;
     
     if (position == LEFT) // y > x
     {
-      x *= -1.0;
-      y = x + shift + (1.0 - x - shift) * random.generate11();
+      x *= -1.0; // if y > x, we want f(x) = -x
+      y = x + shift + (1.0 - x - shift) * random.generate11(); // y from x to 1
     }
-    else y = -1.0 + (x - shift + 1.0) * random.generate11();
+    else y = -1.0 + (x - shift + 1.0) * random.generate11(); // y from -1 to x
   }
 }
 
