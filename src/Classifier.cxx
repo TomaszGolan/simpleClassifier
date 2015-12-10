@@ -17,9 +17,7 @@ Classifier :: Classifier (const unsigned int &N, const bool separable, const dou
   
   pointsB.resize (N); // fill second set
   
-  Point::resetPosition(); // reset position, so points are randomized from whole rectangle
-  
-  learn();
+  Point::resetPosition(); // reset position, so points are randomized from whole rectangle  
 }
 
 //! print pointsA to osA, and pointsB to osB

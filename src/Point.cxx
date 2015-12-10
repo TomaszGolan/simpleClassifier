@@ -8,7 +8,6 @@ double Point::shift = 0.0; //!< initialize shift as 0
 //! generate random (x,y) pair matches given conditions
 Point :: Point ()
 { 
-  
   if (position == ANY)
   {
     x = 2.0 * (random.generate11() - 0.5); // random x from the whole range

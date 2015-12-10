@@ -1,5 +1,5 @@
 #include "Classifier.h"
-#include "KNN.h"
+#include "SVM.h"
 #include "utils.h"
 #include <iostream>
 #include <fstream>
@@ -19,7 +19,11 @@ const string DIR = "svmResults/"; // output folder
 void runSVM (const bool separable, const double shift = 0.0);
 
 int main ()
-{
+{  
+  SVM svm (1000, true, 0.0);
+  
+  return 0;
+  
   for (auto &s : shifts) // loop over shifts
   {
     runSVM (true, s);  // separable points
@@ -30,7 +34,7 @@ int main ()
 }
 
 // run SVM loop for separable or inseparable points for given shift
-void runSVM (const bool separable, const double shift = 0.0)
+void runSVM (const bool separable, const double shift)
 {
-  
+
 }

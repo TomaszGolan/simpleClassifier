@@ -33,9 +33,7 @@ class Point
     static Position position; //!< defines the default position of new point
     
     static double shift; //!< positive shift makes space between two sets, negative makes them overlap
-    
-    Point (const double &x, const double &y) : x (x), y (y) {} //!< constructor of point with define coordinates
-    
+       
   protected:
         
     inline static void setPosition (const Position &p) { position = p; }          //!< set position given by user
@@ -49,11 +47,21 @@ class Point
   public:
     
     Point (); //!< constructor sets up random coordinates respect to position
+    
+    Point (const double x, const double y) : x (x), y (y) {} //!< constructor of point with define coordinates
         
     inline void print (std::ostream &os = std::cout) const { os << x << " " << y << "\n"; } //!< print point to ostream
             
     //! return euclidean distance from given point
     inline double distance (const Point& p) const { return (x - p.x) * (x - p.x) + (y - p.y) * (y - p.y); }
+    
+    //! get x coordinate
+    inline double getX() const { return x; }
+
+    //! get y coordinate
+    inline double getY() const { return y; }
+    
+    double operator* (const Point &p) const { return this->x * p.x + this->y * p.y; }
 };
 
 #endif
