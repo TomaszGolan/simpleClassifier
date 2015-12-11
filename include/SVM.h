@@ -32,7 +32,6 @@ class SVM : public Classifier
  
     bool updateAlpha (const unsigned int index);                     //!< update given alpha value (true if updated)
     bool updateAlpha (const unsigned int i1, const unsigned int i2); //!< update given pair of alphas (true for success)
-    void updateSurface();                                            //!< update wx and wy coefficients 
     inline double surfaceAt (const unsigned int index) const         //!< return the value of surface at given point
       {return wx * points[index].first.getX() + wy * points[index].first.getY() - b;}
       

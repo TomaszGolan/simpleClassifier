@@ -10,37 +10,36 @@ OBJ = $(SRC:$(SRC_DIR)/%.cxx=$(OBJ_DIR)/%.o)
 CXX = g++ -std=c++11 -Wall
 CXXFLAGS = -I $(INC_DIR) -lboost_system -lboost_filesystem
 
-BIN = runKNN runSVM
+BIN = $(BIN_DIR)/runKNN $(BIN_DIR)/runSVM
 
-runKNN.dep = runKNN.o Point.o Classifier.o KNN.o utils.o
+$(BIN_DIR)/runKNN.dep = runKNN.o Point.o Classifier.o KNN.o utils.o
 
-runSVM.dep = runSVM.o Point.o Classifier.o SVM.o utils.o
+$(BIN_DIR)/runSVM.dep = runSVM.o Point.o Classifier.o SVM.o utils.o
 
-all: createFolders $(OBJ) $(BIN)
+all: init $(OBJ) $(BIN)
 
 $(OBJ): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.cxx
-	@echo "\n##### Compiling $@ #####\n"
-	$(CXX) -c $< -o $@  $(CXXFLAGS) #compiling
-
-$(BIN):
-	@echo "\n##### Linking $@ #####\n"
-	$(CXX) $(addprefix $(OBJ_DIR)/, $($@.dep)) -o $(BIN_DIR)/$@ $(CXXFLAGS) 
+	@tabs 10
+	@echo -ne 'Compiling \033[1m$@\033[0m...'
+	@$(CXX) -c $< -o $@  $(CXXFLAGS)
+	@echo -e '\tdone'
 	
-createFolders:
-		mkdir -p $(OBJ_DIR)
-		mkdir -p $(BIN_DIR)
+$(BIN):
+	@tabs 10
+	@echo -ne 'Linking \033[1m$@\033[0m...'
+	@$(CXX) $(addprefix $(OBJ_DIR)/, $($@.dep)) -o $@ $(CXXFLAGS) 
+	@echo -e '\tdone'
+	
+init:
+	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(BIN_DIR)
 	
 clean:
-	@echo "\n##### Removing $(OBJ) $(addprefix $(BIN_DIR)/, $(BIN)) #####\n"
-	@rm -f $(OBJ) $(addprefix $(BIN_DIR)/, $(BIN))
+	@echo -ne 'Removing \033[1m$(OBJ) $(BIN)\033[0m...'
+	@rm -f $(OBJ) $(BIN)
+	@echo ' done'
 
 doxygen:
-	doxygen docs/Doxyfile
-	
-run:
-	make
-	./bin/runKNN
-	./gnuplot/plotKNN.sh
-
-clear:
-	rm -r knnResults/
+	@echo -ne 'Generating \033[1mdocs/Doxyfile\033[0m...'
+	@doxygen docs/Doxyfile > docs/Doxyfile.log
+	@echo " done"

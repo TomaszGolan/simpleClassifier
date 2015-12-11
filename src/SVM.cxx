@@ -18,7 +18,7 @@ void SVM::learn (const char *book)
   while (isChanged and not (isChanged = false)) // loop until isChanged (and set initial value isChanged to false)
     for (unsigned int i = 0; i < N; i++)        // loop over alphas
       isChanged = updateAlpha (i) or isChanged; // call updateAlpha and update the flag
-      
+
   printSurface();
 }
 
@@ -94,27 +94,12 @@ bool SVM::updateAlpha (const unsigned int i1, const unsigned int i2)
   return 1;
 }
 
-//! loop over all alphas and calculate coefficients according to vec v = sum_i y_i * alpha_i * vec x_i
-void SVM::updateSurface()
-{
-  for (unsigned int i = 0; i < N; i++)
-  if (alpha[i] > epsilon)
-  {
-    const double ay = alpha[i] * points[i].second;
-    wx +=  ay * points[i].first.getX();
-    wy +=  ay * points[i].first.getY();
-  }
-}
-
 //! check sign of a free parameter and print the surface in the form y = a*x + b
 void SVM::printSurface () const 
 {
   const double B = -b / wy;
   
-  if (B > epsilon)
-    std::cout << "\n\n y = " << - wx / wy << " * x + " << B << "\n\n";    
-  else if (B < -epsilon)
-    std::cout << "\n\n y = " << - wx / wy << " * x - " <<  -B << "\n\n";    
-  else
-    std::cout << "\n\n y = " << - wx / wy << " * x\n\n";    
+  if (B > epsilon) std::cout << "\n\n y = " << - wx / wy << " * x + " << B << "\n\n";    
+  else if (B < -epsilon) std::cout << "\n\n y = " << - wx / wy << " * x - " <<  -B << "\n\n";    
+  else std::cout << "\n\n y = " << - wx / wy << " * x\n\n";    
 }
