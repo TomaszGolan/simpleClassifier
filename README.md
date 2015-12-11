@@ -4,6 +4,7 @@ Simple project to learn more about classifiers
 Two sets of 2D points are considered:
 
 1) below and above f(x) = x (separable)
+
 2) inside and outside circle (inseparable)
 
 A shift may be applied to make sets overlapped or be separate them more.
