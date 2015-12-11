@@ -11,6 +11,6 @@ A shift may be applied to make sets overlapped or be separate them more.
 
 runKNN run a loop for different samples sizes and number of nearest neighbours (for both cases)
 
-gnuplot/ contains some useful gnuplot scripts to plot everything (plotKNN.sh plots all KNN results)
+gnuplot/ contains some useful gnuplot scripts to plot everything (./gnuplot/plotKNN.sh plots all KNN results)
 
 linear SVM implemented, kernel trick coming soon
