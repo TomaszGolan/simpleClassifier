@@ -1,0 +1,9 @@
+*.backup
+*.out
+*.aux
+*.dvi
+*.log
+*.kilepr
+obj/*
+bin/*
+knnResults/*

@@ -1,0 +1,91 @@
+\section{k-Nearest Neighbors}
+\label{sec: knn}
+
+k-Nearest Neighbors is one of the simplest machine learning algorithms\footnote{kNN is also used for regression. In this note, only the use for classification is discussed.}. Lets imagine we have $N$ training examples in our feature space which are given by:
+
+\begin{itemize}
+  \item a feature vector $\vec x = (x_1, x_2, ... , x_n)$
+  \item a class membership $y$
+\end{itemize}
+
+For a given vector $\vec x'$ we want to determine its membership $y'$. The idea is to look at $k$ nearest neighbors and let the majority decide - if among the $k$ nearest neighbors the most of training vectors belongs to the class $y_j$, the given vector also belongs to $y_j$. The optimal value of $k$ is unique for the problem and must be determine empirically. 
+
+\begin{figure}
+
+  \centering\input{figures/knnExample}
+  \caption{Two classes of points: blue and orange. The red dot represents the point to classify.}
+  \label{fig: knnExample}
+  
+\end{figure}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{c | c | c}
+
+class & coordinates & distance$^2$ \\ \hline
+\color{blue}blue     & $(-3,-1)$ & $4$  \\
+\color{blue}blue     & $(-1,-2)$ & $1$  \\
+\color{blue}blue     & $(2,-2)$  & $10$ \\ \hline
+\color{orange}orange & $(-1,2)$  & $9$  \\
+\color{orange}orange & $(1,1)$   & $8$  \\
+\color{orange}orange & $(-2,1)$  & $9$  \\
+
+\end{tabular}
+\end{center}
+
+\caption{The list of distances between the red point and each training example from Fig. \ref{fig: knnExample}.}
+\label{tab: knnExDist}
+
+\end{table}
+
+Lets consider the example presented on Fig. \ref{fig: knnExample}. There are two classes of points: blue and orange. The size of the training set is 6 (3 for each class). The red point is the one to classify (by eye it looks like it should belongs to blue points).
+
+The distances\footnote{Actually, squares of distances are considered, as it does not affect the result, but we avoid square roots.} between the red point and each training example are presented in Tab. \ref{tab: knnExDist}. Euclidean metric was used, however, the choice of a metric is arbitrary and we could use as well Chebyshev distance, cosine similarity etc. Now, lets take a look how we classify the red point for different $k$:
+
+\begin{itemize}
+ \item[\color{blue}blue] for $k = 1$, $2$, $3$
+ \item[\color{orange}orange] for $k = 5$
+ \item[\color{red}tie] for $k = 4$, $6$
+\end{itemize}
+
+This was ultra-simple example to demonstrate the method, but still some conclusions can be drawn:
+
+\begin{itemize}
+  \item for binary classification $k$ should be odd to avoid a tie
+  \item large $k$ does not necessary mean better results (especially when $k \sim$ training sets size)
+  \item one can consider simple expansion with {\it vote weight} depending on the distance
+\end{itemize}
+
+Lets consider once again the given example, but now each point votes for a class membership with the weight given by 1 / distance$^2$, as in Tab. \ref{tab: knnExDistW}. Now, for any $k \in [1,6]$ the red point is classified as blue:
+
+\begin{itemize}
+ \item[k = 1:] {\color{blue}1.000} vs {\color{orange}0.000} 
+ \item[k = 2:] {\color{blue}1.250} vs {\color{orange}0.000} 
+ \item[k = 3:] {\color{blue}1.250} vs {\color{orange}0.125} 
+ \item[k = 4:] {\color{blue}1.250} vs {\color{orange}0.236} 
+ \item[k = 5:] {\color{blue}1.250} vs {\color{orange}0.347} 
+ \item[k = 6:] {\color{blue}1.350} vs {\color{orange}0.347} 
+\end{itemize}
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{c | c | c | c}
+
+class & coordinates & distance$^2$ & weight \\ \hline
+\color{blue}blue     & $(-3,-1)$ & $4$  & 0.250 \\
+\color{blue}blue     & $(-1,-2)$ & $1$  & 1.000 \\
+\color{blue}blue     & $(2,-2)$  & $10$ & 0.100 \\ \hline
+\color{orange}orange & $(-1,2)$  &  $9$ & 0.111 \\
+\color{orange}orange & $(1,1)$   & $8$  & 0.125 \\
+\color{orange}orange & $(-2,1)$  & $9$  & 0.111 \\
+
+\end{tabular}
+\end{center}
+
+\caption{The list of distances between the red point and each training example from Fig. \ref{fig: knnExample}. The vote weight is defined as 1 / distance$^2$.}
+\label{tab: knnExDistW}
+
+\end{table}
+
+\input{tex/knnSep}

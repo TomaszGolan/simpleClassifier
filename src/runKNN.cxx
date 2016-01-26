@@ -7,11 +7,13 @@
 
 using namespace std;
 
-const unsigned int N_MIN  = 100; // minimum sample size
-const unsigned int N_MAX  = 500; // maximum sample size
-const unsigned int N_STEP =  25; // step for sample size
-const unsigned int K_MIN  =  25; // minimum no. of nearest neighbours
-const unsigned int K_STEP =  25; // step for no. of nearest neighbours
+const unsigned int N_MIN  =  10; // minimum sample size
+const unsigned int N_MAX  = 100; // maximum sample size
+const unsigned int N_STEP =  10; // step for sample size
+const unsigned int K_MIN  =   1; // minimum no. of nearest neighbours
+const unsigned int K_STEP =  10; // step for no. of nearest neighbours
+
+const unsigned int N_REPEAT = 1000; // how many times repeat given configuration to obtain average score
 
 const vector <double> shifts = {0.0, -0.1, 0.1};
 
@@ -22,6 +24,8 @@ void runKNN (const bool separable, const double shift = 0.0);
 
 int main ()
 {
+  runKNN (true); return 0;
+  
   for (auto &s : shifts) // loop over shifts
   {
     runKNN (true, s);  // separable points
@@ -46,22 +50,33 @@ void runKNN (const bool separable, const double shift)
   
   for (unsigned int n = N_MIN; n <= N_MAX; n += N_STEP) // sample size loop
   {
-    for (unsigned int k = K_MIN; k <= n; k += K_STEP) // no. of nearest neighbours loop
-    {
+    for (unsigned int k = K_MIN; k <= n + 1; k += K_STEP) // no. of nearest neighbours loop
+    {      
       // let me know what are you doing
       cout << "Running kNN (" << flagSep << ", " << flagShf << ") for N = " << n << ", k = " << k << " -> score = ";
       
-      KNN knn (n, k, separable, shift); // create kNN for given configuration
+      double score = 0;
+      double repeat = 0; 
       
-      const double score = knn.run(); // get score
+      while (++repeat <= N_REPEAT)
+      {
+      
+        KNN knn (n, k, separable, shift); // create kNN for given configuration
+      
+        score += knn.run(); // get score
+
+        // save learning samples, guessed points and not guessed points (only for first run)
+        if (repeat == 1)
+          knn.save ((DIR + flagSep + "/" + flagShf + "/" 
+                     + "knn_" + to_string (n) + "_" + to_string (k) + "_" + flagSep + "_" + flagShf).c_str());      
+      };
+      
+      score /= N_REPEAT;
       
       cout << score << "\n"; // print the score
       
       resultsFile << n << " " << k << " " << score << "\n"; // save the score
       
-      // save learning samples, guessed points and not guessed points
-      knn.save ((DIR + flagSep + "/" + flagShf + "/" 
-                 + "knn_" + to_string (n) + "_" + to_string (k) + "_" + flagSep + "_" + flagShf).c_str());      
     } // no. of nearest neighbours loop end
     
     resultsFile << "\n"; // for gnuplot's splot
