@@ -27,7 +27,7 @@ Point :: Point ()
     // use CDF to get x according to f(x) = x
     const double u = random.generate11();
     x = 2.0 * sqrt(u) - 1.0;
-    
+        
     if (position == LEFT) // y > x
     {
       x *= -1.0; // if y > x, we want f(x) = -x

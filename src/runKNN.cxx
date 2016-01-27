@@ -7,13 +7,13 @@
 
 using namespace std;
 
+const unsigned int N = 100000; // the size of testing samples
+
 const unsigned int N_MIN  =   5; // minimum sample size
 const unsigned int N_MAX  = 100; // maximum sample size
 const unsigned int N_STEP =  10; // step for sample size
 const unsigned int K_MIN  =   5; // minimum no. of nearest neighbours
 const unsigned int K_STEP =  10; // step for no. of nearest neighbours
-
-const unsigned int N_REPEAT = 100; // how many times repeat given configuration to obtain average score
 
 const vector <double> shifts = {0.0, -0.1, 0.1};
 
@@ -57,24 +57,14 @@ void runKNN (const bool separable, const double shift, const bool useWeights)
       cout << "Running kNN (" << flagSep << ", " << flagShf << ", " << flagWgt << ") "
             << "for N = " << n << ", k = " << k << " -> score = ";
       
-      double score = 0;
-      double repeat = 0; 
+      KNN knn (n, N, k, separable, shift, useWeights); // create kNN for given configuration
       
-      while (++repeat <= N_REPEAT)
-      {
-      
-        KNN knn (n, k, separable, shift, useWeights); // create kNN for given configuration
-      
-        score += knn.run(); // get score
+      const double score = knn.run(); // get score
 
-        // save learning samples, guessed points and not guessed points (only for first run)
-        if (repeat == 1)
-          knn.save ((DIR + "/" + flagWgt + "/" + flagSep + "/" + flagShf + "/"
-            + "knn_" + to_string (n) + "_" + to_string (k) + "_" + flagSep + "_" + flagShf + "_" + flagWgt).c_str());      
-      };
-      
-      score /= N_REPEAT;
-      
+      // save learning samples, guessed points and not guessed points
+      knn.save ((DIR + "/" + flagWgt + "/" + flagSep + "/" + flagShf + "/"
+               + "knn_" + to_string (n) + "_" + to_string (k) + "_" + flagSep + "_" + flagShf + "_" + flagWgt).c_str());      
+            
       cout << score << "\n"; // print the score
       
       resultsFile << n << " " << k << " " << score << "\n"; // save the score

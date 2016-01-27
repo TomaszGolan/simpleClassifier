@@ -1,11 +1,11 @@
 #set terminal pngcairo size 1280, 960
-set terminal postscript eps enhanced color 'ArialBold' 18
+set terminal postscript eps enhanced color 'ArialBold' 24
 
 set xlabel 'The size of each training set'
 set ylabel 'Number of neighbours (k)'
 
 set pm3d map
-#set cbrange [0:1]
+set cbrange [0.9:1]
 
 unset key
 

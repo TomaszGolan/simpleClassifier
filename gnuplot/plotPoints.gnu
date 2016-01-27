@@ -1,5 +1,5 @@
 #set terminal pngcairo size 1280, 960
-set terminal postscript eps enhanced color 'ArialBold' 18
+set terminal postscript eps enhanced color 'ArialBold' 24
 
 set xlabel 'x'
 set ylabel 'y'
@@ -21,7 +21,7 @@ do for [file in files] {
     # set title
 
     set output sprintf('%s_samples.eps', file)
-    plot setA lc rgb color1 title 'Learning sample A', setB lc rgb color3 title 'Learning sample B'
+    plot setA lc rgb color1 title 'Training set A', setB lc rgb color3 title 'Training set B'
 
     set output sprintf('%s_results.eps', file)
     plot setS lc rgb color5 title 'Success', setF lc rgb color4 title 'Failure'

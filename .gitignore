@@ -4,6 +4,8 @@
 *.dvi
 *.log
 *.kilepr
+*.ps
+*.dvi
 obj/*
 bin/*
-knnResults/*
+knnResults*

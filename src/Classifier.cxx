@@ -2,8 +2,8 @@
 #include <fstream>
 
 //! fill samples A/B by LEFT/RIGHT points or IN/OUT (circle), depends if user wants separable points or not
-Classifier :: Classifier (const unsigned int &N, const bool separable, const double shift)
-              : separable (separable), N (N)
+Classifier :: Classifier (const unsigned int nTrain, const unsigned int nTest, const bool separable, const double shift)
+                          : separable (separable), nTrain (nTrain), nTest (nTest)
 {
   Point::setShift (shift);
   
@@ -11,11 +11,11 @@ Classifier :: Classifier (const unsigned int &N, const bool separable, const dou
   if (separable) Point::setPosition (Point::LEFT);
   else Point::setPosition (Point::IN);
   
-  pointsA.resize (N); // default constructor sets point randomly according to Point::position
+  pointsA.resize (nTrain); // default constructor sets point randomly according to Point::position
   
   Point::switchPosition(); // change position, LEFT -> RIGHT, IN -> OUT
   
-  pointsB.resize (N); // fill second set
+  pointsB.resize (nTrain); // fill second set
   
   Point::resetPosition(); // reset position, so points are randomized from whole rectangle  
 }
@@ -49,15 +49,13 @@ void Classifier :: save (const std::string base) const
 //! generate N points, check if reconstructed correctly and save to proper vector
 double Classifier :: run ()
 {
-  for (unsigned int i = 0; i < N; i++) // points loop
+  for (unsigned int i = 0; i < nTest; i++) // points loop
   {
     Point p; // create random point
         
-    if (isReconstructed (p)) // if guessed correctly
-      pointsS.push_back (p);
-    else
-      pointsF.push_back (p);
+    if (isReconstructed (p)) pointsS.push_back (p); // guessed correctly
+    else pointsF.push_back (p);
   }
   
-  return (double)pointsS.size() / (double)N;
+  return (double)pointsS.size() / (double)nTest;
 }

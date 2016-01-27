@@ -28,8 +28,9 @@ class KNN : public Classifier
   public:
   
     //! constructor calls Classifier constructor and sets up number of nearest neighbors
-    KNN (const unsigned int N, const unsigned int k, const bool separable = true, const double shift = 0.0,
-         const bool useWeights = false): Classifier (N, separable, shift), nNeighbors (k), useWeights (useWeights) {}
+    KNN (const unsigned int nTrain, const unsigned int nTest, const unsigned int k, const bool separable = true,
+         const double shift = 0.0, const bool useWeights = false)
+         : Classifier (nTrain, nTest, separable, shift), nNeighbors (k), useWeights (useWeights) {}
 };
 
 #endif

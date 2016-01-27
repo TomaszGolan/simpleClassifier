@@ -18,7 +18,8 @@ class Classifier
   
     const bool separable; //!< separable point or not
     
-    const unsigned int N; //!< size of the samples
+    const unsigned int nTrain; //!< size of the training set
+    const unsigned int nTest;  //!< size of the testing set
         
     std::vector <Point> pointsS; //!< points guessed correctly
     
@@ -47,7 +48,7 @@ class Classifier
   public:
   
     //! constructor fills learning samples
-    Classifier (const unsigned int &N, const bool separable = true, const double shift = 0);
+    Classifier (const unsigned int nTrain, const unsigned int nTest, const bool separable = true, const double shift = 0);
 
     double run (); //!< run classifier and return score
 
