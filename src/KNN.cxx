@@ -20,12 +20,29 @@ bool KNN :: process (const Point &p) const
   
   fillNeighbors (p, neighbors, pointsA, true);  // fill neighbors list with learning sample A
   fillNeighbors (p, neighbors, pointsB, false); // fill neighbors list with learning sample B
+      
+  if (useWeights)
+  {
+    double scoreA = 0.0;
+    double scoreB = 0.0;
+    
+    // loop over closest neighbors and count votes
+    for (std::multiset<Neighbor>::iterator it = neighbors.begin(); it != neighbors.end(); ++it)
+      if (not (*it).first) return (*it).second; // distance = 0 -> the same point
+      else if ((*it).second)     scoreA += 1.0 / (*it).first; // setA
+      else if (not (*it).second) scoreB += 1.0 / (*it).first; // setB
+                
+    return scoreA > scoreB;
+  }
+  else
+  {
+    unsigned int counter = 0;
+    // loop over closest neighbors and check how many times points from A occur
+    for (std::multiset<Neighbor>::iterator it = neighbors.begin(); it != neighbors.end(); ++it)
+      if ((*it).second) counter++;
+
+    return 2 * counter > nNeighbors; // return true if there is more than half of points from A  
+  }
   
-  unsigned int counter = 0;
-  
-  // loop over closest neighbors and check how many times points from A occur
-  for (std::multiset<Neighbor>::iterator it = neighbors.begin(); it != neighbors.end(); ++it)
-    if ((*it).second) counter++;
-  
-  return 2 * counter > nNeighbors; // return true if there is more than half of points from A
+  exit(1); // can not reach this point
 }

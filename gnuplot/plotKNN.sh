@@ -1,8 +1,9 @@
 #!/bin/bash
 
 folder="knnResults"
-subfolders=("separable" "inseparable")
-subsubfolders=("default" "distant" "overlapped")
+subfolders=("weighted" "unweighted")
+subsubfolders=("separable" "inseparable")
+subsubsubfolders=("default" "distant" "overlapped")
 
 echo "Plotting results in $folder..."
 
@@ -15,10 +16,13 @@ for sub in "${subfolders[@]}"
 do
   for subsub in "${subsubfolders[@]}"
   do
-    echo "Plotting points sets from $folder/$sub/$subsub"
-    cp gnuplot/plotPoints.gnu $folder/$sub/$subsub
-    cd $folder/$sub/$subsub
-    gnuplot plotPoints.gnu
-    cd ../../..
+    for subsubsub in "${subsubsubfolders[@]}"
+    do
+      echo "Plotting points sets from $folder/$sub/$subsub/$subsubsub"
+      cp gnuplot/plotPoints.gnu $folder/$sub/$subsub/$subsubsub
+      cd $folder/$sub/$subsub/$subsubsub
+      gnuplot plotPoints.gnu
+      cd ../../../..
+    done
   done
 done

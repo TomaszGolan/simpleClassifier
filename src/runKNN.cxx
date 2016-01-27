@@ -7,53 +7,55 @@
 
 using namespace std;
 
-const unsigned int N_MIN  =  10; // minimum sample size
+const unsigned int N_MIN  =   5; // minimum sample size
 const unsigned int N_MAX  = 100; // maximum sample size
 const unsigned int N_STEP =  10; // step for sample size
-const unsigned int K_MIN  =   1; // minimum no. of nearest neighbours
+const unsigned int K_MIN  =   5; // minimum no. of nearest neighbours
 const unsigned int K_STEP =  10; // step for no. of nearest neighbours
 
-const unsigned int N_REPEAT = 1000; // how many times repeat given configuration to obtain average score
+const unsigned int N_REPEAT = 100; // how many times repeat given configuration to obtain average score
 
 const vector <double> shifts = {0.0, -0.1, 0.1};
 
 const string DIR = "knnResults/"; // output folder
 
 // run kNN loop for separable or inseparable points for given shift
-void runKNN (const bool separable, const double shift = 0.0);
+void runKNN (const bool separable, const double shift = 0.0, const bool useWeights = false);
 
 int main ()
-{
-  runKNN (true); return 0;
-  
+{ 
   for (auto &s : shifts) // loop over shifts
   {
-    runKNN (true, s);  // separable points
-    runKNN (false, s); // inseparable points
+    runKNN (true, s, false);  // separable points w/o weights
+    runKNN (false, s, false); // inseparable points w/o weights
+    runKNN (true, s, true);  // separable points with weights
+    runKNN (false, s, true); // inseparable points with weights
   }
        
   return 0;
 }
 
 // run kNN loop for separable or inseparable points for given shift
-void runKNN (const bool separable, const double shift)
+void runKNN (const bool separable, const double shift, const bool useWeights)
 { 
   // set flags based on arguments
   const string flagSep = separable ? "separable" : "inseparable";
   const string flagShf = shift == 0 ? "default" : (shift > 0 ? "distant" : "overlapped");
+  const string flagWgt = useWeights ? "weighted" : "unweighted";
   
   // create all folders in the path "DIR/flagSep/flagShf"
-  createPath (vector <string> ({DIR, flagSep, flagShf}));
+  createPath (vector <string> ({DIR, flagWgt, flagSep, flagShf}));
     
   // files to save score for given configuration
-  ofstream resultsFile ((DIR + "knn_" + flagSep + "_" + flagShf + ".dat").c_str());
+  ofstream resultsFile ((DIR + "knn_" + flagSep + "_" + flagShf + "_" + flagWgt + ".dat").c_str());
   
   for (unsigned int n = N_MIN; n <= N_MAX; n += N_STEP) // sample size loop
   {
-    for (unsigned int k = K_MIN; k <= n + 1; k += K_STEP) // no. of nearest neighbours loop
+    for (unsigned int k = K_MIN; k <= n; k += K_STEP) // no. of nearest neighbours loop
     {      
       // let me know what are you doing
-      cout << "Running kNN (" << flagSep << ", " << flagShf << ") for N = " << n << ", k = " << k << " -> score = ";
+      cout << "Running kNN (" << flagSep << ", " << flagShf << ", " << flagWgt << ") "
+            << "for N = " << n << ", k = " << k << " -> score = ";
       
       double score = 0;
       double repeat = 0; 
@@ -61,14 +63,14 @@ void runKNN (const bool separable, const double shift)
       while (++repeat <= N_REPEAT)
       {
       
-        KNN knn (n, k, separable, shift); // create kNN for given configuration
+        KNN knn (n, k, separable, shift, useWeights); // create kNN for given configuration
       
         score += knn.run(); // get score
 
         // save learning samples, guessed points and not guessed points (only for first run)
         if (repeat == 1)
-          knn.save ((DIR + flagSep + "/" + flagShf + "/" 
-                     + "knn_" + to_string (n) + "_" + to_string (k) + "_" + flagSep + "_" + flagShf).c_str());      
+          knn.save ((DIR + "/" + flagWgt + "/" + flagSep + "/" + flagShf + "/"
+            + "knn_" + to_string (n) + "_" + to_string (k) + "_" + flagSep + "_" + flagShf + "_" + flagWgt).c_str());      
       };
       
       score /= N_REPEAT;
