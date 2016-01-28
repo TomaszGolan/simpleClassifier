@@ -7,7 +7,8 @@
 
 using namespace std;
 
-const unsigned int N = 100000; // the size of testing samples
+const unsigned int N_TEST   = 100;  // the size of testing samples
+const unsigned int N_REPEAT = 1000; // number of repetition per configuration
 
 const unsigned int N_MIN  =   5; // minimum sample size
 const unsigned int N_MAX  = 100; // maximum sample size
@@ -57,13 +58,21 @@ void runKNN (const bool separable, const double shift, const bool useWeights)
       cout << "Running kNN (" << flagSep << ", " << flagShf << ", " << flagWgt << ") "
             << "for N = " << n << ", k = " << k << " -> score = ";
       
-      KNN knn (n, N, k, separable, shift, useWeights); // create kNN for given configuration
+      double score = 0;
+      double N = 0;
       
-      const double score = knn.run(); // get score
+      while (N++ <= N_REPEAT)
+      {
+        KNN knn (n, N_TEST, k, separable, shift, useWeights); // create kNN for given configuration
+        score += knn.run(); // get score
 
-      // save learning samples, guessed points and not guessed points
-      knn.save ((DIR + "/" + flagWgt + "/" + flagSep + "/" + flagShf + "/"
+        // save learning samples, guessed points and not guessed points (only for first run)
+        if (N == 1)
+          knn.save ((DIR + "/" + flagWgt + "/" + flagSep + "/" + flagShf + "/"
                + "knn_" + to_string (n) + "_" + to_string (k) + "_" + flagSep + "_" + flagShf + "_" + flagWgt).c_str());      
+      }
+      
+      score /= N_REPEAT; // average score
             
       cout << score << "\n"; // print the score
       

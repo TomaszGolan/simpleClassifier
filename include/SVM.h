@@ -41,7 +41,7 @@ class SVM : public Classifier
   
     //! constructor calls Classifier constructor (initialize surface coefficient and alpha as 0)
     SVM (const unsigned int &N, const bool separable = true, const double shift = 0.0)
-      : Classifier (N, separable, shift), N (2*N), C (1.0), wx (0.0), wy (0.0), b (0.0)
+      : Classifier (N, 0, separable, shift), N (2*N), C (1.0), wx (0.0), wy (0.0), b (0.0)
     {
       // just for convenience store all points in one vector as pairs (point, value)
       for (const auto &p : pointsA) points.emplace_back (p, 1);
