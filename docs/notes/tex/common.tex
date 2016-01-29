@@ -1,22 +1,18 @@
 \usepackage[utf8]{inputenc}
 \usepackage{color}
 
-\definecolor{black} {RGB} { 44,  50,  61}
-\definecolor{gray}  {RGB} { 76, 100, 114}
-\definecolor{green} {RGB} { 90, 134, 119}
-\definecolor{orange}{RGB} {240,  85,  38}
-\definecolor{red}   {RGB} {218,  31,  47} 
-\definecolor{blue}  {RGB} { 52, 130, 190}
+\renewcommand\thefootnote{\textcolor{mred}{\arabic{footnote}}}
 
 \usepackage{hyperref}
 \usepackage{breakurl}
-\hypersetup{colorlinks = true, urlcolor = blue, breaklinks = true}
+\hypersetup{colorlinks = true, urlcolor = mblue, citecolor = mred, linkcolor = mred, breaklinks = true}
 
 \usepackage{tikz}
 \usepackage{tikz-3dplot}
 \usetikzlibrary{positioning,arrows,fadings,decorations.pathreplacing,decorations.pathmorphing,decorations.markings,shapes,backgrounds,snakes}
-\input{figures/tikzStyles}
 \usepackage{pgfplots}
+
+\input{tex/colors}
 
 \usepackage{subfigure}
 \usepackage{enumitem}

@@ -1,0 +1,32 @@
+\begin{tikzpicture}
+
+  \begin{axis}[axis lines = none, axis equal]
+    
+
+    \addplot[mark = none, color = morange, thick, ->, >=latex] coordinates {(0.0, 1.0) (0.0, 1.25)};
+
+    \addplot[mark = none, color = morange, thick, ->, >=latex] coordinates {(-0.5, 0.75) (-0.5, 1.0)};
+    
+    \addplot[smooth, color = mblack, thick, domain = -0.6:0.6] {-x*x + 1} node[above, pos = 0.75] {\color{mgray}$f$};
+    
+    \addplot[color = mgray, thick, dashed, domain = -0.35:-0.65] {x + 1.25};
+    \addplot[color = mgray, thick, dashed, domain = -0.35:-0.65] {-x + 0.25};
+    
+    \addplot[mark = none, color = mblue, thick, ->, >=latex] coordinates {(-0.5, 0.75) (-0.4, 0.85)};
+
+    \node(grad) [color = mgray] at (axis cs:-0.3,1.25) {\tiny gradients};
+    
+    \draw [color = mgray, ->, >=latex, shorten >= 2pt] (grad) -- (axis cs:0.0, 1.1);
+    \draw [color = mgray, ->, >=latex, shorten >= 2pt] (grad) -- (axis cs:-0.5, 1.0);
+    
+    \node(move) [color = mgray] at (axis cs: 0.0, 0.75) {\tiny the direction of movement};
+    
+    \draw [color = mgray, ->, >=latex, shorten >= 2pt] (move.west) -- (axis cs:-0.45, 0.8);
+    
+    \node(nomove) [color = mgray, text width = 10cm, align = center] at (axis cs: 0.4, 1.2) {\tiny perpendicular gradient \\ no more moves \\};
+    
+    \draw [color = mgray, ->, >=latex, shorten >= 2pt] (nomove) -- (axis cs:0.0, 1.0);
+    
+  \end{axis}
+
+\end{tikzpicture}

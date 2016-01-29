@@ -20,12 +20,12 @@ For a given vector $\vec x'$ its membership $y'$ must be determined. The idea is
 \begin{tabular}{c | c | c}
 
 class & coordinates & distance$^2$ \\ \hline
-\color{blue}blue     & $(-3,-1)$ & $4$  \\
-\color{blue}blue     & $(-1,-2)$ & $1$  \\
-\color{blue}blue     & $(2,-2)$  & $10$ \\ \hline
-\color{orange}orange & $(-1,2)$  & $9$  \\
-\color{orange}orange & $(1,1)$   & $8$  \\
-\color{orange}orange & $(-2,1)$  & $9$  \\
+\color{mblue}blue     & $(-3,-1)$ & $4$  \\
+\color{mblue}blue     & $(-1,-2)$ & $1$  \\
+\color{mblue}blue     & $(2,-2)$  & $10$ \\ \hline
+\color{morange}orange & $(-1,2)$  & $9$  \\
+\color{morange}orange & $(1,1)$   & $8$  \\
+\color{morange}orange & $(-2,1)$  & $9$  \\
 
 \end{tabular}
 \end{center}
@@ -40,9 +40,9 @@ Lets consider the example presented on Fig. \ref{fig: knnExample}. There are two
 The distances\footnote{Actually, squares of distances are considered to avoid square roots (it does not affect the result).} between the red point and each training example are presented in Tab. \ref{tab: knnExDist}. Euclidean metric was used, however, the choice of a metric is arbitrary and Chebyshev distance, cosine similarity etc. can be used as well. Now, lets take a look how the red point is classified for different $k$:
 
 \begin{itemize}[leftmargin = 100pt]
- \item[\color{blue}blue] for $k = 1$, $2$, $3$
- \item[\color{orange}orange] for $k = 5$
- \item[\color{red}tie] for $k = 4$, $6$
+ \item[\color{mblue}blue] for $k = 1$, $2$, $3$
+ \item[\color{morange}orange] for $k = 5$
+ \item[\color{mred}tie] for $k = 4$, $6$
 \end{itemize}
 
 This was ultra-simple example to demonstrate the method, but still some conclusions can be drawn:
@@ -56,12 +56,12 @@ This was ultra-simple example to demonstrate the method, but still some conclusi
 Lets consider once again the given example, but now each point votes for a class membership with the weight given by 1 / distance$^2$, as in Tab. \ref{tab: knnExDistW}. Now, for any $k \in [1,6]$ the red point is classified as blue:
 
 \begin{itemize}[leftmargin = 100pt]
- \item[k = 1:] {\color{blue}1.000} vs {\color{orange}0.000} 
- \item[k = 2:] {\color{blue}1.250} vs {\color{orange}0.000} 
- \item[k = 3:] {\color{blue}1.250} vs {\color{orange}0.125} 
- \item[k = 4:] {\color{blue}1.250} vs {\color{orange}0.236} 
- \item[k = 5:] {\color{blue}1.250} vs {\color{orange}0.347} 
- \item[k = 6:] {\color{blue}1.350} vs {\color{orange}0.347} 
+ \item[k = 1:] {\color{mblue}1.000} vs {\color{morange}0.000} 
+ \item[k = 2:] {\color{mblue}1.250} vs {\color{morange}0.000} 
+ \item[k = 3:] {\color{mblue}1.250} vs {\color{morange}0.125} 
+ \item[k = 4:] {\color{mblue}1.250} vs {\color{morange}0.236} 
+ \item[k = 5:] {\color{mblue}1.250} vs {\color{morange}0.347} 
+ \item[k = 6:] {\color{mblue}1.350} vs {\color{morange}0.347} 
 \end{itemize}
 
 \begin{table}
@@ -69,12 +69,12 @@ Lets consider once again the given example, but now each point votes for a class
 \begin{tabular}{c | c | c | c}
 
 class & coordinates & distance$^2$ & weight \\ \hline
-\color{blue}blue     & $(-3,-1)$ & $4$  & 0.250 \\
-\color{blue}blue     & $(-1,-2)$ & $1$  & 1.000 \\
-\color{blue}blue     & $(2,-2)$  & $10$ & 0.100 \\ \hline
-\color{orange}orange & $(-1,2)$  &  $9$ & 0.111 \\
-\color{orange}orange & $(1,1)$   & $8$  & 0.125 \\
-\color{orange}orange & $(-2,1)$  & $9$  & 0.111 \\
+\color{mblue}blue     & $(-3,-1)$ & $4$  & 0.250 \\
+\color{mblue}blue     & $(-1,-2)$ & $1$  & 1.000 \\
+\color{mblue}blue     & $(2,-2)$  & $10$ & 0.100 \\ \hline
+\color{morange}orange & $(-1,2)$  &  $9$ & 0.111 \\
+\color{morange}orange & $(1,1)$   & $8$  & 0.125 \\
+\color{morange}orange & $(-2,1)$  & $9$  & 0.111 \\
 
 \end{tabular}
 \end{center}

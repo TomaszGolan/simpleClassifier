@@ -1,0 +1,36 @@
+\begin{tikzpicture}
+
+  \begin{axis}[axis lines = none, axis equal]
+            
+    \addplot[mark = none, color = mgreen, thick, ->, >=latex] coordinates {(-0.7, -0.343) (-0.9, -0.207)};
+    
+    \addplot[mark = none, color = morange, thick, ->, >=latex] coordinates {(-0.7, -0.343) (-0.8, 0.0)};
+
+    \addplot[mark = none, color = morange, thick, ->, >=latex] coordinates {(0.5, 0.125) (0.3, 0.391)};    
+
+    \addplot[mark = none, color = mgreen, thick, ->, >=latex] coordinates {(0.5, 0.125) (0.4, 0.258)};    
+    
+    \addplot[smooth, color = mblack, thick, domain = -1:1] {x*x*x} node[right, pos = 0.75] {\color{mgray}$g$};
+    
+    \addplot[mark = none, color = mblue, thick, ->, >=latex] coordinates {(-0.7, -0.343) (-0.6, -0.2)};
+    
+    \node(grad) [color = mgray] at (axis cs:-0.5,0.5) {\tiny gradients of $f$};
+
+    \draw [color = mgray, ->, >=latex, shorten >= 2pt] (grad) -- (axis cs:-0.8,0);
+    \draw [color = mgray, ->, >=latex, shorten >= 2pt] (grad) -- (axis cs:0.3, 0.391);
+    
+    \node(gradg) [color = mgray, text width = 3cm, align = center] at (axis cs:-0.3,-0.8) {\tiny gradients of $g$ \\ always perpendicular to $g$ \\};
+    
+    \draw [color = mgray, ->, >=latex, shorten >= 2pt] ([xshift=-1cm] gradg.north) -- (axis cs:-0.8, -0.3);
+    
+    \node(dir) [color = mgray, text width = 5cm, align = left] at (axis cs:0.4,-0.5) {\tiny the direction of movement \\ must be perpendicular to $\nabla g$ \\};
+    
+    \draw [color = mgray, ->, >=latex, shorten >= 2pt] (dir) -- (axis cs:-0.65,-0.3);
+    
+    \node(end) [color = mgray, text width = 3cm, align = center] at (axis cs:0.6,-0.2) {\tiny $\nabla f \parallel \nabla g$ \\ no more moves\\};
+    
+    \draw [color = mgray, ->, >=latex, shorten >= 2pt] (end) -- (axis cs:0.5,0.125);
+    
+  \end{axis}
+
+\end{tikzpicture}
