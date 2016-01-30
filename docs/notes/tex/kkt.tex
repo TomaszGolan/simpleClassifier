@@ -1,2 +1,54 @@
 \subsection{Karush–Kuhn–Tucker conditions}
 \label{sec: kkt}
+
+Lets consider optimization of function $f (\vec x) : \mathbb{R}^n \rightarrow \mathbb{R}$ with $N$ equality constraints $g_i (\vec x)$ and $M$ inequality\footnote{Note, in many books $h_i \leq 0$ constraints are considered so signs are different.} constraints $h_i (\vec x)$:
+
+\begin{subequations}
+ \begin{equation}
+  \text{optimize}\hspace{10pt} f (\vec x)
+ \end{equation}
+ \begin{equation}
+  \text{subject to}\hspace{10pt}\forall_{i=1,...,N}\hspace{5pt} g_i(\vec x) = 0
+  \label{eq: pf1}
+ \end{equation}
+ \begin{equation}
+  \text{subject to}\hspace{10pt}\forall_{i=1,...,M}\hspace{5pt} h_i(\vec x) \geq 0
+  \label{eq: pf2}
+ \end{equation}
+ \label{eq: optimizationKKT}
+\end{subequations}
+
+and lets define the Lagrangian $\mathcal{L} (\vec x, \lambda_1, ..., \lambda_N, \mu_1, ... , \mu_M) \equiv \mathcal{L} (\vec x, \lambda, \mu)$ as\footnote{$\mu_i$ are known as KKT multipliers.}:
+
+\begin{equation}
+  \mathcal{L} (\vec x, \lambda, \mu) = f(\vec x) - \sum_{i = 1}^N\lambda_i g_i (\vec x) \pm \sum_{i = 1}^M\mu_i h_i (\vec x)
+  \label{eq: lagrKKT}
+\end{equation}
+
+where the last sign depends on the kind of optimization to perform. The choice is arbitrary but KKT conditions must be written consistently. Lets choose '+' for maximization and '-' for minimization. Then, Karush-Kuhn-Tucker conditions can be written as:
+
+\begin{subequations}
+ \begin{equation}
+  \nabla \mathcal{L} (\vec x, \lambda, \mu) = 0
+  \label{eq: kktS}
+ \end{equation}
+ \begin{equation}
+  \forall_{i=1,...,M} \hspace{5pt} \mu_i \geq 0
+  \label{eq: kktD}
+ \end{equation}
+ \begin{equation}
+  \forall_{i=1,...,M} \hspace{5pt} \mu_i \cdot h_i (\vec x) = 0
+  \label{eq: kktCS}
+ \end{equation}
+ \label{eq: kkt}
+\end{subequations}
+
+Eq. \ref{eq: kktS} is called stationarity. It is analogous to Eq. \ref{eq: lagrEq}. Eqs. \ref{eq: pf1} and \ref{eq: pf2} are known as primal feasibility. Lets try to understand two new conditions. 
+
+Eq. \ref{eq: kktD}, knows as dual feasibility, is quite easy to understand. Take a look on the way Lagrangian is defined (Eq. \ref{eq: lagrKKT}) and note that $h_i \geq 0$. For the maximization '+' sign was chosen. Thus, for $\mu_i < 0$ function $f$ would be decreased, which does not make any sense for maximization. Analogously, for minimization, with '-' sign, $\mu_i$ can not be negative to avoid increasing $f$.
+
+The last condition, given by Eq. \ref{eq: kktCS}, is called complementary slackness. One can think about it in the following way. If the original optimum is in $h_i(\vec x) > 0$, $h_i$ constraint does not change it, so $\mu_i$ should be zero. Otherwise, $h_i (\vec x) = 0$, so in general $\mu_i \cdot h_i (\vec x) = 0$.
+
+Any time an optimization problem with inequality constraints is being solved, the local optimum must fulfill all KKT conditions. It is easy to see, that in the absence of inequalities ($M = 0$), the problems is solved using Lagrange multipliers.
+
+

@@ -1,57 +1,57 @@
 \subsection{Lagrange multipliers}
 \label{sec: lm}
 
-Lagrange multipliers is the method to optimize (find minimum or maximum) of the function $f (x_1, ... , x_n) : \mathbb{R}^n \rightarrow \mathbb{R}$ with given constraint\footnote{In general, the constraint could be given by $g (x_1, ..., x_n) = c$, but it does not hurt to introduce $g'(x_1, ..., x_n) = g (x_1, ..., x_n) - c = 0$.} $g (x_1, ..., x_n) = 0$. The method is based on the fact that the gradient of the function $f$ must be parallel to the gradient of the constraint $g$:
+Lagrange multipliers is the method to optimize (find minimum or maximum) of the function $f (\vec x) : \mathbb{R}^n \rightarrow \mathbb{R}$ with given constraint\footnote{The constraint could be given by $g (\vec x) = c$, but one can introduce $g'(\vec x) = g (\vec x) - c = 0$.} $g (\vec x) = 0$. The method is based on the fact that the gradient of the function $f$ must be parallel to the gradient of the constraint $g$:
 
 \begin{equation}
- \nabla f (x_1, ..., x_n) = \lambda \nabla g (x_1, ..., x_n)
+ \nabla f (\vec x) = \lambda \nabla g (\vec x)
  \label{eq: lmBase}
 \end{equation}
 
 where $\lambda$ is a Lagrange multiplier. Why Eq. \ref{eq: lmBase} is true? Lets consider intuitive geometric explanation. If you want a strict proof grab a math book!
 
-In general, the gradient $\nabla f$ gives the directions to head to minimize / maximize $f$. If going exactly in the direction of the gradient is impossible, but it is possible to go in the direction of a component of the gradient it still good (just increase / decrease is slower). If the gradient is perpendicular, there is no such component and the local minimum / maximum is found. Fig. \ref{fig: lmf} illustrates this.
+In general, the gradient $\nabla f$ gives the directions to head to optimize $f$. If going exactly in the direction of the gradient is impossible, but it is possible to go in the direction of a component of the gradient it still good (just increase / decrease is slower). If the gradient is perpendicular, there is no such component and the local optimum is found. Fig. \ref{fig: lmf} illustrates this.
 
 \begin{figure}
 \hfill
-\subfigure[Looking of the local minimum / maximum of the function $f$.]{\scalebox{0.8}{\input{figures/lmf}} \label{fig: lmf}}
+\subfigure[Looking of the local optimum of the function $f$.]{\scalebox{0.8}{\input{figures/lmf}} \label{fig: lmf}}
 \hfill
 \subfigure[Moving along the constraint $g$.]{\scalebox{0.8}{\input{figures/lmg}} \label{fig: lmg}}
 \hfill
 \caption{The illustration of constraint optimization.}
 \end{figure}
 
-If constraint $g = 0$ is given, the movement is restricted to fulfill the condition. In other words, only moves along $g$ are possible. To keep $g$ constant, only moves perpendicular to the gradient of $g$ are allowed (otherwise increase or decrease of $g$ would occur). This is demonstrated on Fig. \ref{fig: lmg}. The direction of the movement is determined by $\nabla g$ (must be perpendicular) and $\nabla f$. More precisely it is given by a component of $\nabla f$ perpendicular to $\nabla g$. If $\nabla f$ is parallel to $\nabla g$ there is no such component and the local minimum / maximum with constraint is found.
+If constraint $g = 0$ is given, the movement is restricted to fulfill the condition. In other words, only moves along $g$ are possible. To keep $g$ constant, only moves perpendicular to the gradient of $g$ are allowed (otherwise increase or decrease of $g$ would occur). This is demonstrated on Fig. \ref{fig: lmg}. The direction of the movement is determined by $\nabla g$ (must be perpendicular) and $\nabla f$. More precisely it is given by a component of $\nabla f$ perpendicular to $\nabla g$. If $\nabla f$ is parallel to $\nabla g$ there is no such component and the local optimum (fulfilling the constraint) is found.
 
 For convenience, lets introduce Lagrangian defined as:
 
 \begin{equation}
- L (x_1, ..., x_n) = f (x_1, ..., x_n) - \lambda g (x_1, ..., x_n)
+ \mathcal{L} (\vec x, \lambda) = f (\vec x) - \lambda g (\vec x)
  \label{eq: lagrangian0}
 \end{equation}
 
 so the Eq. \ref{eq: lmBase} can be rewritten as:
 
 \begin{equation}
- \nabla L (x_1, ..., x_n) = 0
+ \nabla \mathcal{L} (\vec x, \lambda) = 0
  \label{eq: lagrEq}
 \end{equation}
 
-Lets go back to SVM optimization problem defined by Eq. \ref{eq: optimization}. The number of constraints there is equal to the size of the training set. Fortunately, the generalization of the Lagrangian (Eq. \ref{eq: lagrangian0}) is straightforward:
+Lets go back to SVM optimization problem defined by Eq. \ref{eq: optimization}. The number of constraints there is equal to the size of the training set ($N$). Fortunately, the generalization of the Lagrangian (Eq. \ref{eq: lagrangian0}) is straightforward:
 
 \begin{equation}
- L (x_1, ..., x_n) = f (x_1, ..., x_n) - \sum_i\lambda_i g_i (x_1, ..., x_n)
+ \mathcal{L} (\vec x, \lambda_1, ..., \lambda_N) = f (\vec x) - \sum_{i = 1}^N\lambda_i g_i (\vec x)
  \label{eq: lagrangian}
 \end{equation}
 
 where $\lambda_i$ is Lagrange multiplier for the constraint $g_i$. The reasoning stays the same, but the movement of $f$ is now restricted by many constrains:
 
 \begin{eqnarray*}
- \nabla f (x_1, ..., x_n) & = &  \lambda_1 \nabla g_1 (x_1, ..., x_n) \\
- \nabla f (x_1, ..., x_n) & = &  \lambda_2 \nabla g_2 (x_1, ..., x_n) \\
+ \nabla f (\vec x) & = &  \lambda_1 \nabla g_1 (\vec x) \\
+ \nabla f (\vec x) & = &  \lambda_2 \nabla g_2 (\vec x) \\
 			 & ... & \\
- \nabla f (x_1, ..., x_n) & = &  \lambda_N \nabla g_N (x_1, ..., x_n)
+ \nabla f (\vec x) & = &  \lambda_N \nabla g_N (\vec x)
 \end{eqnarray*}
 
-There is still one piece missing. The optimization problem given by Eq. \ref{eq: optimization} use inequality constraints. The generalization of Lagrange multipliers method to inequality constrains is given by Karush–Kuhn–Tucker conditions, described in Sec. \ref{sec: kkt}.
+There is still one piece missing. The optimization problem given by Eq. \ref{eq: optimization} is constrained by inequalities. The generalization of Lagrange multipliers method to inequality constrains is given by Karush–Kuhn–Tucker (KKT) conditions, described in Sec. \ref{sec: kkt}.
 
