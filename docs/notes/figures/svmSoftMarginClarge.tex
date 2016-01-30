@@ -1,0 +1,23 @@
+\begin{tikzpicture}[scale=0.7]
+
+  \begin{axis}[xlabel = $x$, ylabel = $y$, xmin = -5.0, xmax = 5.0, ymin = -5.0, ymax = 5.0]
+    
+    \addplot[mark = *, , draw = none, color = morange] coordinates {(1,1)}; 
+    \addplot[mark = *, , draw = none, color = morange] coordinates {(-1,2)}; 
+    \addplot[mark = *, , draw = none, color = morange] coordinates {(-2,1)}; 
+
+    \addplot[mark = *, , draw = none, color = mblue] coordinates {(-1,-2)}; 
+    \addplot[mark = *, , draw = none, color = mblue] coordinates {(2,-2)}; 
+    \addplot[mark = *, , draw = none, color = mblue] coordinates {(-3,-1)}; 
+
+    \addplot[mark = *, , draw = none, color = mblue] coordinates {(0,-0.8)}; 
+
+    \addplot[mark = *, , draw = none, color = morange] coordinates {(-1,-0.5)}; 
+    
+    \addplot[color = mred]         {-0.25*x - 0.5};
+    \addplot[color = mred, dashed] {-0.25*x - 1};
+    \addplot[color = mred, dashed] {-0.25*x + 0};   
+    
+  \end{axis}
+
+\end{tikzpicture}

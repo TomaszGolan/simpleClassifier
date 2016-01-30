@@ -1,0 +1,53 @@
+\subsection{Soft margin}
+\label{sec: svmLinearSoft}
+
+So far, only perfectly separable cases were discussed, with the hyperplane which exactly separates two training sets (like presented on Figs. \ref{fig: knnSepTrainSetDef} and \ref{fig: knnSepTrainSetDis}). It is so called SVM with hard margin. It is clearly going to fail if training sets overlapped (like presented on Fig. \ref{fig: knnSepTrainSetOvr}). There is a simple extension to SVM method which allows some points to exists within the margin (between $\omega_0^* + \left<\vec\omega^*, \vec x\right> = 0$ and $\omega_0^* + \left<\vec\omega^*, \vec x\right> = \pm 1$ on Fig. \ref{fig: svmMargin}). It is so called SVM with soft margin. 
+
+\begin{figure}
+ \centering\input{figures/svmSoftMargin}
+ \caption{The example of soft margin. {\it Note, it is just a demonstrative cartoon, not real calculations.}}
+ \label{fig: svmSoftMargin}
+\end{figure}
+
+Lets associate the error $\varepsilon_i$ with every feature vector $\vec x_i$. The error defines how deep into the margin $\vec x_i$ falls:
+
+\begin{itemize}
+ \item[$\varepsilon_i = 0$] $\vec x_i$ is outside the margin
+ \item[$\tau > \varepsilon_i > 0$] $\vec x_i$ is inside the margin but on the right side of the hyperplane
+ \item[$\varepsilon_i > \tau$] $\vec x_i$ is on the wrong side of the hyperplane
+\end{itemize}
+
+as presented on Fig. \ref{fig: svmSoftMargin}. It requires to modify constraints defined by Eq. \ref{eq: optimization0C}:
+
+\begin{equation}
+  \forall_i\hspace{5pt} y_i \cdot \left(\omega_0 + \left<\vec\omega, \vec x_i\right>\right) + \varepsilon_i||\vec\omega||\geq \tau(\vec\omega, \omega_0)\cdot ||\vec\omega|| 
+\end{equation}
+
+After applying normalization bond $||\tau\cdot\vec\omega|| = 1$ the new constraints may be written as:
+
+\begin{equation}
+  \forall_i\hspace{5pt} y_i \cdot \left(\omega_0 + \left<\vec\omega, \vec x_i\right>\right) + \xi_i\geq 1
+  \label{eq: softCsr}
+\end{equation}
+
+where $\xi_i \equiv \varepsilon_i||\vec\omega||$ is introduced for convenience. Once again the goal is to maximize $\tau$, so minimize $||\vec\omega||$, but also to minimize the errors $\xi_i$, with constraints defined by Eq. \ref{eq: softCsr}. In other words:
+
+\begin{eqnarray}
+ \text{minimize} & & Q(\vec\omega, \xi_1, ... , \xi_N) = \frac{1}{2}||\vec\omega||^2 + C\sum_{i=1}^N\xi_i \\ \nonumber
+ \text{subject to} & & \forall_i\hspace{5pt} y_i \cdot \left(\omega_0 + \left<\vec\omega, \vec x_i\right>\right) + \xi_i\geq 1 \\ \nonumber
+ \text{} & & \xi_i \geq 0
+ \label{eq: optimizationSoft}
+\end{eqnarray}
+
+where $C > 0$ is a free parameter. Small $C$ makes the second term of $Q$ less important. It means the optimization is focused on finding large $\tau$ even for a price of having large errors $\xi_i$. On the other hand, large $C$ makes the optimization more sensitive to errors $\xi_i$ so small margin $\tau$ is preferred to minimize errors. It is demonstrated on Fig. \ref{fig: svmSoftMarginC}.
+
+\begin{figure}
+\hfill
+\subfigure[Large $C$]{\input{figures/svmSoftMarginClarge}}
+\hfill
+\subfigure[Small $C$]{\input{figures/svmSoftMarginCsmall}}
+\hfill
+\caption{The example of different choices of parameter $C$. {\it Note, it is just a demonstrative cartoon, not real calculations.}}
+\label{fig: svmSoftMarginC}
+\end{figure}
+

@@ -10,13 +10,21 @@
     \addplot[mark = *, , draw = none, color = mblue] coordinates {(2,-2)}; 
     \addplot[mark = *, , draw = none, color = mblue] coordinates {(-3,-1)}; 
 
+    \addplot[mark = *, , draw = none, color = mblue] coordinates {(0,-0.8)}; 
+    \addplot[mark = none, color = mgray] coordinates {(0,-0.8) (-0.12, -1.45)} node[right, pos=0.5, rotate=-10] {\tiny$\varepsilon < \tau$}; 
+
+    \addplot[mark = *, , draw = none, color = morange] coordinates {(-1,-0.5)}; 
+    \addplot[mark = none, color = mgray] coordinates {(-1,-0.5) (-0.75, 0.7)} node[right, pos=0.5, rotate=-10] {\tiny$\varepsilon > \tau$}; 
+
+    
     \addplot[mark = none, color = mgray] coordinates {(-2,1) (-2.175,0.05)} node[right, pos=0.5, rotate=-10] {\tiny$\tau$}; 
     \addplot[mark = none, color = mgray] coordinates {(2,-2) (2.175,-1.05)} node[left, pos=0.5, rotate=-10] {\tiny$\tau$}; 
 
     \addplot[color = mred]         {-0.25*x - 0.5} node[below, pos=0.15, rotate=-10] {\color{mblack}\tiny$\omega_0^* + \left<\vec\omega^*, \vec x\right> = 0$};;
     \addplot[color = mred, dashed] {-0.25*x - 1.5} node[below, pos=0.85, rotate=-10] {\color{mblack}\tiny$\omega_0^* + \left<\vec\omega^*, \vec x\right> = -1$};
     \addplot[color = mred, dashed] {-0.25*x + 0.5} node[above, pos=0.85, rotate=-10] {\color{mblack}\tiny$\omega_0^* + \left<\vec\omega^*, \vec x\right> = 1$};;
-        
+    
+    
   \end{axis}
 
 \end{tikzpicture}
