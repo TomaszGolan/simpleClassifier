@@ -1,10 +1,10 @@
 \subsection{Linear SVM using Lagrange multipliers}
 \label{sec: svmLinearLM}
 
-Lets go back to SVM optimization problem defined by Eq. \ref{eq: optimization} and introduce the Lagrangian $\mathcal{L} (\vec x, \lambda_1, ..., \lambda_N) \equiv \mathcal{L} (\vec x, \lambda, \mu$ defined by:
+Lets go back to SVM optimization problem defined by Eq. \ref{eq: optimization} and introduce the Lagrangian $\mathcal{L} (\vec x, \lambda_1, ..., \lambda_N) \equiv \mathcal{L} (\vec x, \lambda)$ defined by:
 
 \begin{equation} 
-  \mathcal{L} (\vec x, \lambda, \mu) = \frac{1}{2}||\vec\omega||^2 - \sum_{i=1}^N \lambda_i \cdot \left(y_i \cdot \left(\omega_0 + \left<\vec\omega, \vec x_i\right>\right) - 1\right)
+  \mathcal{L} (\vec x, \lambda) = \frac{1}{2}||\vec\omega||^2 - \sum_{i=1}^N \lambda_i \cdot \left(y_i \cdot \left(\omega_0 + \left<\vec\omega, \vec x_i\right>\right) - 1\right)
   \label{eq: svmL}
 \end{equation}
 
@@ -51,7 +51,7 @@ and from Eq. \ref{eq: spoint2}:
 Lets use Eqs. \ref{eq: svmL}, \ref{eq: from1} and \ref{eq: from2} to express the Lagrangian only in terms of $\lambda_i$:
 
 \begin{eqnarray}
-  \mathcal{L} (\vec x, \lambda, \mu) & = & \frac{1}{2}||\vec\omega||^2 - \sum_{i=1}^N \lambda_i \cdot \left(y_i \cdot \left(\omega_0 + \left<\vec\omega, \vec x_i\right>\right) - 1\right) \\ \nonumber
+  \mathcal{L} (\vec x, \lambda) & = & \frac{1}{2}||\vec\omega||^2 - \sum_{i=1}^N \lambda_i \cdot \left(y_i \cdot \left(\omega_0 + \left<\vec\omega, \vec x_i\right>\right) - 1\right) \\ \nonumber
   & = & \frac{1}{2}\left<\vec\omega, \vec\omega\right> - \omega_0 \sum_{i=1}^N \lambda_iy_i - \sum_{i=1}^N\lambda_iy_i\left<\vec\omega, \vec x_i\right> + \sum_{i=1}^{N}\lambda_i \\ \nonumber
   & = & \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_j\left<\vec x_i, \vec x_j\right> - 0 - \sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_j\left<\vec x_i, \vec x_j\right> + \sum_{i=1}^{N}\lambda_i \\ \nonumber
   & = & -\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_j\left<\vec x_i, \vec x_j\right> + \sum_{i=1}^{N}\lambda_i
@@ -59,11 +59,10 @@ Lets use Eqs. \ref{eq: svmL}, \ref{eq: from1} and \ref{eq: from2} to express the
 
 Finally, only the maximization of $\mathcal{L}$ respect to $\lambda_i$ must be performed, so the problem now is defined as:
 
-\begin{eqnarray}
- \text{maximize} & & \mathcal{L} (\vec x, \lambda, \mu) = -\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_j\left<\vec x_i, \vec x_j\right> + \sum_{i=1}^{N}\lambda_i \\ \nonumber
+\begin{eqnarray}\label{eq: optimizationLM}
+ \text{maximize} & & \mathcal{L} (\vec x, \lambda) = -\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_j\left<\vec x_i, \vec x_j\right> + \sum_{i=1}^{N}\lambda_i \\ \nonumber
  \text{subject to} & & \forall_i \hspace{10pt} \lambda_i \geq 0 \\ \nonumber
  \text{} & & \sum_{i=1}^{N} \lambda_iy_i = 0
- \label{eq: optimizationLM}
 \end{eqnarray}
 
 Usually, most of $\lambda_i$ are equal zero. Vectors $\vec x_i$ which correspond to $\lambda_i > 0$ are called support vectors (and suddenly the name of the method is clear!). According to Eq. \ref{eq: from1}, the normal vector $\vec\omega$ is linear combinations of support vectors. Take a look at Fig. \ref{fig: svmMargin}. Support vectors are those lying on $\omega_0^* + \left<\vec\omega^*, \vec x\right> = \pm 1$. The last piece is the absolute term $\omega_0$, which can be calculated from any constraint (for any support vector):

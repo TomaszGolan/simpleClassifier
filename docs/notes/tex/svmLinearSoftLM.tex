@@ -1,0 +1,32 @@
+\subsection{Linear SVM with soft margin using Lagrange multipliers}
+\label{sec: svmLinearSoftLM}
+
+For the soft margin the procedure is the same as explained in Sec. \ref{sec: svmLinearLM}, but now the optimization requires also minimization of errors with the constraint $\xi_i \geq 0$. Lets define the Lagrangian as:
+
+\begin{equation} 
+  \mathcal{L} (\vec x, \lambda, \mu) = \frac{1}{2}||\vec\omega||^2 + C\sum_{i=1}^N\xi_i - \sum_{i=1}^N \lambda_i \cdot \left(y_i \cdot \left(\omega_0 + \left<\vec\omega, \vec x_i\right>\right) - 1 + \xi_i\right) - \sum_{i=1}^N\mu_i\xi_i
+  \label{eq: svmSoftL}
+\end{equation}
+
+The necessity condition for a saddle point stays the same as in Eq. \ref{eq: spoint} and the new one appears:
+
+\begin{equation}
+ \forall_i \hspace{10pt} \frac{\partial\mathcal{L}}{\partial\xi_i} = 0 \Rightarrow \lambda_i = C - \mu_i
+\end{equation}
+
+which makes $C$ an upper boundary for $\lambda_i$, so now $0 \leq \lambda_i \leq C$. Calculations like in Sec. \ref{sec: svmLinearLM} can be done to make $\mathcal{L}$ depend only on $\lambda_i$:
+
+\begin{eqnarray}
+  \mathcal{L} (\vec x, \lambda, \mu) & = & \frac{1}{2}||\vec\omega||^2 + C\sum_{i=1}^N\xi_i - \sum_{i=1}^N \lambda_i \cdot \left(y_i \cdot \left(\omega_0 + \left<\vec\omega, \vec x_i\right>\right) - 1 + \xi_i\right) - \sum_{i=1}^N\mu_i\xi_i \nonumber \\
+  & = & -\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_j\left<\vec x_i, \vec x_j\right> - \sum_{i=1}^{N}\lambda_i (\xi_i - 1) + \sum_{i=1}^NC\xi_i - \sum_{i=1}^N\mu_i\xi_i \nonumber \\
+  & = & -\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_j\left<\vec x_i, \vec x_j\right> - \sum_{i=1}^{N}\lambda_i (\xi_i - 1) + \sum_{i=1}^N(\lambda_i + \mu_i)\xi_i - \sum_{i=1}^N\mu_i\xi_i \nonumber \\
+  & = & -\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_j\left<\vec x_i, \vec x_j\right> + \sum_{i=1}^{N}\lambda_i
+\end{eqnarray}
+
+Finally, the only difference between optimizing SVM with hard margin (see Eq. \ref{eq: optimizationLM}) and soft margin is the upper boundary on $\lambda_i$ defined by the free parameter $C$:
+
+\begin{eqnarray}\label{eq: optimizationSoftLM}
+ \text{maximize} & & \mathcal{L} (\vec x, \lambda) = -\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_j\left<\vec x_i, \vec x_j\right> + \sum_{i=1}^{N}\lambda_i \\ \nonumber
+ \text{subject to} & & \forall_i \hspace{10pt} 0 \leq \lambda_i \leq C \\ \nonumber
+ \text{} & & \sum_{i=1}^{N} \lambda_iy_i = 0
+\end{eqnarray}
