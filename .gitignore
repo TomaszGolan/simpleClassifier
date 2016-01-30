@@ -6,6 +6,7 @@
 *.kilepr
 *.ps
 *.dvi
+*.toc
 obj/*
 bin/*
 knnResults*

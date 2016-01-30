@@ -1,0 +1,76 @@
+\subsection{Linear SVM using Lagrange multipliers}
+\label{sec: svmLinearLM}
+
+Lets go back to SVM optimization problem defined by Eq. \ref{eq: optimization} and introduce the Lagrangian $\mathcal{L} (\vec x, \lambda_1, ..., \lambda_N) \equiv \mathcal{L} (\vec x, \lambda, \mu$ defined by:
+
+\begin{equation} 
+  \mathcal{L} (\vec x, \lambda, \mu) = \frac{1}{2}||\vec\omega||^2 - \sum_{i=1}^N \lambda_i \cdot \left(y_i \cdot \left(\omega_0 + \left<\vec\omega, \vec x_i\right>\right) - 1\right)
+  \label{eq: svmL}
+\end{equation}
+
+where $\lambda_i \geq 0$ as discussed in Sec. \ref{sec: kkt}. Note, that having $\lambda_i = \infty$ gives the trivial minimum at $-\infty$. In fact, one needs to minimize $\mathcal{L}$ respect to $||\omega||$ and maximize respect to $\lambda_i$. The solution is given by a saddle point, as demonstrated on Fig. \ref{fig: spoint}.
+
+\begin{figure}
+ \centering\input{figures/spoint}
+ \caption{The cartoon demonstrating the saddle point.}
+ \label{fig: spoint}
+\end{figure}
+
+The necessity condition for a saddle point requires all partial derivatives to be zero:
+
+\begin{subequations}
+ \begin{equation}
+  \frac{\partial\mathcal{L}}{\partial\vec\omega} = 0
+  \label{eq: spoint1}
+ \end{equation}
+ \begin{equation}
+  \frac{\partial\mathcal{L}}{\partial\omega_0} = 0
+  \label{eq: spoint2}
+ \end{equation}
+ \begin{equation}
+  \forall_i \hspace{10pt} \frac{\partial\mathcal{L}}{\partial\lambda_i} = 0
+  \label{eq: spoint3}
+ \end{equation}
+ \label{eq: spoint}
+\end{subequations}
+
+From Eq. \ref{eq: spoint1}:
+
+\begin{equation}
+ \vec\omega = \sum_{i=1}^N \lambda_iy_i\vec x_i
+ \label{eq: from1}
+\end{equation}
+
+and from Eq. \ref{eq: spoint2}:
+
+\begin{equation}
+ \sum_{i=1}^{N} \lambda_iy_i = 0
+ \label{eq: from2}
+\end{equation}
+
+Lets use Eqs. \ref{eq: svmL}, \ref{eq: from1} and \ref{eq: from2} to express the Lagrangian only in terms of $\lambda_i$:
+
+\begin{eqnarray}
+  \mathcal{L} (\vec x, \lambda, \mu) & = & \frac{1}{2}||\vec\omega||^2 - \sum_{i=1}^N \lambda_i \cdot \left(y_i \cdot \left(\omega_0 + \left<\vec\omega, \vec x_i\right>\right) - 1\right) \\ \nonumber
+  & = & \frac{1}{2}\left<\vec\omega, \vec\omega\right> - \omega_0 \sum_{i=1}^N \lambda_iy_i - \sum_{i=1}^N\lambda_iy_i\left<\vec\omega, \vec x_i\right> + \sum_{i=1}^{N}\lambda_i \\ \nonumber
+  & = & \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_j\left<\vec x_i, \vec x_j\right> - 0 - \sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_j\left<\vec x_i, \vec x_j\right> + \sum_{i=1}^{N}\lambda_i \\ \nonumber
+  & = & -\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_j\left<\vec x_i, \vec x_j\right> + \sum_{i=1}^{N}\lambda_i
+\end{eqnarray}
+
+Finally, only the maximization of $\mathcal{L}$ respect to $\lambda_i$ must be performed, so the problem now is defined as:
+
+\begin{eqnarray}
+ \text{maximize} & & \mathcal{L} (\vec x, \lambda, \mu) = -\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_j\left<\vec x_i, \vec x_j\right> + \sum_{i=1}^{N}\lambda_i \\ \nonumber
+ \text{subject to} & & \forall_i \hspace{10pt} \lambda_i \geq 0 \\ \nonumber
+ \text{} & & \sum_{i=1}^{N} \lambda_iy_i = 0
+ \label{eq: optimizationLM}
+\end{eqnarray}
+
+Usually, most of $\lambda_i$ are equal zero. Vectors $\vec x_i$ which correspond to $\lambda_i > 0$ are called support vectors (and suddenly the name of the method is clear!). According to Eq. \ref{eq: from1}, the normal vector $\vec\omega$ is linear combinations of support vectors. Take a look at Fig. \ref{fig: svmMargin}. Support vectors are those lying on $\omega_0^* + \left<\vec\omega^*, \vec x\right> = \pm 1$. The last piece is the absolute term $\omega_0$, which can be calculated from any constraint (for any support vector):
+
+\begin{eqnarray}
+ y_i \cdot \left(\omega_0 + \left<\vec\omega, \vec x_i\right>\right) - 1 & = & 0 \\ \nonumber
+ y_i\omega_0 & = & 1 - y_i \left<\vec\omega, \vec x_i\right> \\ \nonumber
+ \omega_0 & = & y_i - \left<\vec\omega, \vec x_i\right>
+\end{eqnarray}
+

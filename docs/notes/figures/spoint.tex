@@ -1,0 +1,23 @@
+\pgfplotsset{
+colormap={mycolors}{color(0cm)=(white); color(1cm)=(mgreen!75!mblue)}
+}
+
+\pgfplotsset{ticks=none}
+
+\begin{tikzpicture}
+
+\begin{axis}[
+  colormap name=mycolors,
+  view={30}{30},
+  domain=-100:100,
+  xlabel=$||\vec\omega||$,
+  ylabel=$\lambda_i$,
+  zlabel=$\mathcal{L}$,
+  zlabel style={rotate=-90}
+]
+
+\addplot3 [surf] {x^2 - y^2};
+\addplot3 [mark = *, , draw = none, color = mred] coordinates {(0.0, 0.0, 0.0)} node[pin=80:{\color{mred}\small saddle point}]{};
+
+\end{axis}
+\end{tikzpicture}
