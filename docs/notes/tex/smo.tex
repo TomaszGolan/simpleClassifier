@@ -1,0 +1,128 @@
+\subsection{Sequential Minimal Optimization}
+\label{sec: smo}
+
+\subsubsection{Summary of linear SVM problem}
+
+The hyperplane, given by:
+
+\begin{equation}
+ z = \omega_0 + \left<\vec\omega, \vec x\right>
+\end{equation}
+
+separates classes for $z = 0$. The nearest points lie on $z = \pm 1$. The normal vector can be calculated from:
+
+\begin{equation}
+ \vec\omega = \sum_{i=1}^{N} \lambda_i y_i \vec x_i
+ \label{eq: smoOmega}
+\end{equation}
+
+where $N$ is the number of learning samples, $\vec x_i$ is $i$-th feature vector and $y_i$ - corresponding class membership ($\left\{-1, 1\right\}$). $\lambda_i$ are Lagrange (KKT) multipliers, which can be obtained from Eq. \ref{eq: optimizationSoftLM}. Free parameter $\omega_0$ can be calculated from (for any support vector):
+
+\begin{equation}
+ \omega_0 = y_i - \left<\vec\omega, \vec x_i\right>
+ \label{eq: smoOmega0}
+\end{equation}
+
+Using Eq. \ref{eq: smoOmega}, the hyperplane equation can be rewritten in the following form:
+
+\begin{equation}
+ z (\vec x) = \sum_{i=1}^N \lambda_i y_i \left<\vec x_i, \vec x\right> + \omega_0
+\end{equation}
+
+Each training sample must fulfill the KKT conditions, in this case given by:
+
+\begin{eqnarray}
+ \lambda_i = 0 & \Leftrightarrow & y_i z_i \geq 1 \\
+ 0 < \lambda_i < C & \Leftrightarrow & y_i z_i = 1 \\
+ \lambda_i = C & \Leftrightarrow & y_i z_i \leq 1
+\end{eqnarray}
+
+where $z_i = z (\vec x_i)$ is the output for $i$-th training sample. Lets understand why. From complementary slackness condition (Eq. \ref{eq: kktCS}):
+
+\begin{eqnarray}
+ \lambda_i (y_i z_i - 1 + \xi_i) & = & 0 \\
+ \mu_i \xi_i & = & 0
+\end{eqnarray}
+
+If $\lambda_i = 0$, then $\mu_i = C$ (from Eq. \ref{eq: lambdamu}), so $\xi_i = 0$ and the constraint (Eq. \ref{eq: optimizationSoft}) becomes:
+
+\begin{equation}
+ y_i z_i - 1 + \xi_i \geq 0 \Rightarrow y_i z_i - 1 \geq 0
+\end{equation}
+
+If $\lambda_i > 0$, then $y_i z_i - 1 + \xi_i = 0$. If $0 < \lambda < C$, then $\mu_i > 0$, so $\xi_i = 0$ and $y_i z_i - 1 = 0$. If $\lambda = C$, then $\mu_i = 0$, so $\xi_i \geq 0$ and $y_i z_i - 1 \leq 0$.
+
+\subsubsection{SMO algorithm}
+
+Sequential Minimal Optimization (SMO) algorithm was developed by John C. Platt\footnote{{\it Sequential Minimal Optimization: A Fast Algorithm for Training Support Vector Machines}, J.C. Platt, Microsoft Research, Technical Report MSR-TR-98-14.}. The method solves the smallest possible optimization problem at a time. In this case, it means updating two Lagrange multipliers in a step. Why two? To preserve a linear equality constraint ($\sum\limits_{i=1}^N\lambda_iy_i = 0$). It guarantees convergence through Osuna's theorem\footnote{{\it An improved training algorithm for support vector machines}, E. Osuna et al., In Proc. of IEEE NNSP’97, 1997}, which states that the global training problem can be broken down into a sequence of smaller subproblems.
+
+\mbox{}\\
+\noindent\textbf{Updating two Lagrange multipliers}
+\mbox{}\\
+
+\begin{figure}
+\hfill
+\subfigure[$y_a \neq y_b \Rightarrow \lambda_a - \lambda_b = \gamma$]{\input{figures/smoUpdateM} \label{fig: smoUpdateM}}
+\hfill
+\subfigure[$y_a = y_b \Rightarrow \lambda_a + \lambda_b = \gamma$]{\input{figures/smoUpdateP} \label{fig: smoUpdateP}}
+\hfill
+\caption{Possible relations for two Lagrange multipliers. Picture ``cloned'' from {\it Sequential Minimal Optimization: A Fast Algorithm for Training Support Vector Machines}, J.C. Platt, Microsoft Research, Technical Report MSR-TR-98-14.}
+\label{fig: smoUpdate}
+\end{figure}
+
+Lets assume at least one of Lagrange multipliers ($\lambda_a$, $\lambda_b$) violates KKT conditions. Both multipliers must be updated to preserve $\gamma = y_a\lambda_a + y_b\lambda_b$. Also, both are restricted by $0 < \lambda_i < C$ constraint. It is illustrated on Fig. \ref{fig: smoUpdate}.
+
+As only $\lambda_a$ and $\lambda_b$ are going to be changed, lets extract them from sums in the Lagrangian (for convenience $k_{ij} \equiv K (\vec x_i, \vec x_j) = \left<\vec x_i, \vec x_j\right>$ is introduced)\footnote{Note, that $k$ symmetry ($k_{ij} = k_{ji}$) is used.}:
+
+\begin{eqnarray}
+ \mathcal{L} (\lambda) & = & -\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\lambda_i\lambda_jy_iy_jk_{ij} + \sum_{i=1}^{N}\lambda_i \\ \nonumber
+ & = & \lambda_a + \lambda_b + \sum_{\substack{i = 1 \\ i\neq a,b}}^N \lambda_i - \frac{1}{2}\lambda_a^2 k_{aa} - \frac{1}{2}\lambda_b^2k_{bb} - \lambda_a \lambda_b y_a y_b k_{ab} \\ \nonumber
+ & - &  \lambda_a y_a \sum_{\substack{i = 1 \\ i\neq a,b}}^N \lambda_i y_i k_{ia} -  \lambda_b y_b \sum_{\substack{i = 1 \\ i\neq a,b}}^N \lambda_i y_i k_{ib} - \frac{1}{2}\sum_{\substack{i = 1 \\ i\neq a,b}}^N \sum_{\substack{j = 1 \\ j \neq a,b}}^N\lambda_i \lambda_j y_i y_j k_{ij}
+\end{eqnarray}
+
+For convenience lets introduce:
+
+\begin{eqnarray}
+ \tilde\omega_j & = & \sum_{\substack{i = 1 \\ i\neq a,b}}^N \lambda_i y_i k_{ij} \\ \nonumber
+ & = & \sum_{i = 1}^N \lambda_i y_i k_{ij} + \omega_0 - \lambda_a y_a k_{aj} - \lambda_b y_b k_{bj} - \omega_0 \\ \nonumber
+ & = & z_j - \omega_0 - \lambda_a y_a k_{aj} - \lambda_b y_b k_{bj}
+\end{eqnarray}
+
+so the Lagrangian can be rewritten as:
+
+\begin{equation}
+ \mathcal{L} (\lambda_a, \lambda_b) = \lambda_a + \lambda_b - \frac{1}{2}\lambda_a^2 k_{aa} - \frac{1}{2}\lambda_b^2k_{bb} - \lambda_a\lambda_b y_a y_b k_{ab} - \lambda_a y_a \tilde\omega_a - \lambda_b y_b \tilde\omega_b + const
+\end{equation}
+
+where $const$ does not depend on $\lambda_{\{a,b\}}$. As mentioned before, there is an linear dependence between two Lagrange multipliers: $\lambda_a = \gamma - s\lambda_b$, where $s = y_a y_b$. Therefore, the Lagrange can be expressed only by one multiplier (note, $s^2 = 1$ and $sy_a = y_b$):
+
+\begin{eqnarray}
+ \mathcal{L} (\lambda_b) & = & \gamma - s\lambda_b + \lambda_b -\frac{1}{2}\left(\gamma - s\lambda_b\right)^2k_{aa} - \frac{1}{2}\lambda_b^2k_{bb} \\ \nonumber
+ & - & s \left(\gamma - s\lambda_b\right) \lambda_b k_{ab} - \left(\gamma - s\lambda_b\right)y_a \tilde\omega_a - \lambda_b y_b \tilde\omega_b + const \\ \nonumber
+ & = & \gamma - s\lambda_b + \lambda_b - \frac{1}{2}\gamma^2k_{aa} -\frac{1}{2}s^2\lambda_b^2k_{aa} + s \gamma \lambda_b k_{aa} - \frac{1}{2}\lambda_b^2k_{bb} \\ \nonumber
+ & - & s\gamma\lambda_b k_{ab} + s^2 \lambda_b^2k_{ab} - \gamma y_a \tilde\omega_a + s\lambda_b y_a \tilde\omega_a - \lambda_b y_b \tilde\omega_b + const \\ \nonumber
+ & = & \frac{1}{2}\lambda_b^2\left(2k_{ab} - k_{aa} - k_{bb}\right) + \lambda_b\left[1 - s + s\gamma(k_{aa} - k_{ab}) + y_b(\tilde\omega_a - \tilde\omega_b) \right] + const
+\end{eqnarray}
+
+where last $const$ are terms without $\lambda_b$. As the goal is to maximize $\mathcal{L}$, lets check derivatives
+
+\begin{eqnarray}
+ \frac{\partial\mathcal{L} (\lambda_b)}{\partial\lambda_b} & = & \lambda_b\left(2k_{ab} - k_{aa} - k_{bb}\right) + \left[1 - s + s\gamma(k_{aa} - k_{ab}) + y_b(\tilde\omega_a - \tilde\omega_b) \right] \nonumber \\
+ \frac{\partial^2\mathcal{L} (\lambda_b)}{\partial\lambda_b^2} & = & \left(2k_{ab} - k_{aa} - k_{bb}\right)
+\end{eqnarray}
+
+$\frac{\partial^2\mathcal{L} (\lambda_b)}{\partial\lambda_b^2} < 0$ is required for maximum, which is fulfilled by inner product (or most kernels) until $\vec x_a \neq \vec x_b$. One must be careful when two training samples are the same as second derivative is zero then. New $\lambda_b$ is obtained from $\frac{\partial\mathcal{L} (\lambda_b)}{\partial\lambda_b} = 0$:
+
+\begin{equation}
+ \lambda_b^{new} = \frac{s - 1 - s\gamma(k_{aa} - k_{ab}) - y_b(\tilde\omega_a - \tilde\omega_b)}{2k_{ab} - k_{aa} - k_{bb}}
+\end{equation}
+
+where
+
+\begin{eqnarray}
+ \tilde\omega_a - \tilde\omega_b & = & z_a - \omega_0 - \lambda_a y_a k_{aa} - \lambda_b y_b k_{ab} + z_b + \omega_0 + \lambda_a y_a k_{ab} + \lambda_b y_b k_{bb} \nonumber \\ 
+ & = & z_a + z_b - \left(\gamma - s\lambda_b\right)y_a k_{aa} - \lambda_b y_b k_{ab} + \left(\gamma - s\lambda_b\right)y_ak_{ab} + \lambda_b y_b k_{bb} \nonumber \\
+ & = & z_a + z_b - \gamma y_a k_{aa} + \gamma y_a k_{ab} + y_b\lambda_b\left(k_{aa} + k_{bb} - 2k_{ab}\right)
+\end{eqnarray}
+
+
